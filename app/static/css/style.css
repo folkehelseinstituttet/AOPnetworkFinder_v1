@@ -1,0 +1,126 @@
+/* styles.css */
+
+body {
+    background-color: #8e8ea0; /* Gray background for the page */
+    color: #333;
+}
+
+
+#main_text {
+    font-size: 2vw;
+}
+
+#cy {
+    background-color: white; /* Specific background for Cytoscape container */
+    width: 100%; /* Adjusted to percentage */
+    min-height: 42vw; /* Adjusted for a responsive height, or set a specific percentage */
+}
+
+/* Styles for the parent container that holds everything */
+.parent-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 2%;
+}
+
+/* If .cytoscape-container is used as a wrapper for #cy */
+.cytoscape-container {
+    width: 100%; /* Adjusted to percentage */
+    min-height: 42vw; /* Responsive height relative to viewport width */
+}
+
+/* Styles for the left-side container */
+.leftside-container {
+    /*background-color: blue;*/
+    width: 25%; /* Adjusted to percentage */
+    min-height: 42vw; /* Responsive height relative to viewport width */
+}
+
+/* Styles for the right-side container */
+.rightside-container {
+    display: flex;
+    flex-direction: column; /* Align children vertically */
+    align-items: center; /* Center align the children horizontally */
+    width: 40%; /* Adjusted to percentage */
+    min-height: 42vw; /* Adjust as needed */
+}
+
+.bottom-container {
+    display: grid; /* Enable CSS Grid layout */
+    grid-template-columns: 16.5% 58.3% 12.6% 12.6%; /* horizontal grid template 4 columns*/
+    gap: 5%
+    align-items: center;
+    min-height: 5vh; /* Responsive height relative to viewport height */
+}
+
+.top-container {
+    display: grid; /* Enable CSS Grid layout */
+    place-items: center; /* Center items both horizontally and vertically */
+    width: 100%; /* Full width of its parent */
+    min-height: 5vh; /* Responsive height relative to viewport height */
+}
+
+.search-group {
+    margin-right: auto;
+    width: 80%;
+    margin-bottom: 8%;
+}
+
+.search-group label {
+    margin-right: 4%; /* Space between label and input */
+    white-space: nowrap; /* Prevents label from wrapping */
+}
+
+.search-field {
+    margin-left: auto;
+    width: 63%;
+    margin-bottom: 8%;
+}
+
+
+/* Styles for the search button */
+.search-button {
+    margin-left: auto; /* Adjusted to percentage */
+    width: 100%;
+}
+
+#exportToCytoscape {
+    justify-self: start;
+    /*margin-left: 16.5%;*/
+    width: 100%;
+}
+
+#checkboxGene{
+    justify-self: start;
+    margin-left: 0%;
+    width: 16.5%;
+    white-space: nowrap; /* Prevents label from wrapping */
+}
+
+.checkbox-group {
+    width: 80%; /* Match the width of search fields */
+    margin-top: auto; /* Pushes the group to the bottom */
+    margin-right: auto;
+    text-align: left; /* Align checkboxes to the left */
+}
+
+#searchGroupStressor{
+    margin: auto; /* Pushes search field to the center*/
+    width: 67%;
+}
+
+#searchFieldStressor {
+    margin: auto;
+    width: 73.5%;
+}
+
+#saveButtonLog {
+    margin-left: auto; /* Adjusted to percentage */
+    width: 90%;
+}
+
+#mergeButtonKeyEvent {
+    margin-left: auto; /* Adjusted to percentage */
+    width: 90%;
+}

@@ -1,0 +1,81 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+    <h1 class="text-center" id="main_text">AOP Visualizer</h1>
+
+    <div class="top-container">
+            <!-- Search Field 1 -->
+        <div class="search-group" id="searchGroupStressor">
+            <label for="searchFieldStressor">Stressor:</label>
+            <!--Stressor search field -->
+            <input type="text" id="searchFieldStressor" class="search-field-stressor" placeholder="Stressor Name" />
+        </div>
+
+    </div>
+
+    <div class="parent-container">
+
+        <div class="leftside-container">
+            <!--button for searching -->
+            <button id="searchButtonAOP" class="search-button">Search AOP</button>
+        </div>
+
+                <!-- Centered Div for Cytoscape graph -->
+        <div class="cytoscape-container">
+
+            <!-- Cytoscape Window for displaying AOP grafs -->
+            <div id="cy"></div>
+        </div>
+
+        <div class="rightside-container">
+            <!-- input fields for AOP and KE (will add KE Degree later) -->
+
+            <!-- Search Field 1 -->
+            <div class="search-group">
+                <label for="searchFieldAOP">AOP IDs:</label>
+                <!--AOP search field -->
+                <input type="text" id="searchFieldAOP" class="search-field" placeholder="17 or 17,260,107 ..." />
+            </div>
+
+            <div class="search-group">
+                <label for="searchFieldKe">AOP IDs:</label>
+                <!-- KE search field -->
+                <input type="text" id="searchFieldKE" class="search-field" placeholder="1253 or 1253,281,46 ..." />
+            </div>
+
+            <!-- Checkboxes at the bottom -->
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="checkboxDevelopment"> OECD Under Development</label>
+                <label><input type="checkbox" name="checkboxEndorsed"> OECD WPHA Endorsed</label>
+                <label><input type="checkbox" name="checkboxReview"> OECD Under Review</label>
+                <label><input type="checkbox" name="checkboxApproved"> OECD EAGMST Approved</label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="bottom-container">
+
+        <div class="checkbox-group" id="checkboxGene">
+            <label><input type="checkbox" name="checkboxGenes"> Show Genes</label>
+        </div>
+        <!--button for exporting to Cytoscape-->
+        <button id="exportToCytoscape" class="search-button-cytoscape">Export to Cytoscape</button>
+        <!--button for saving user Actions -->
+        <button id="saveButtonLog" class="search-button">Save Log File</button>
+        <!--Merge Key Event Nodes -->
+        <button id="mergeButtonKeyEvent" class="search-button">Merge KE:</button>
+
+    </div>
+
+    <!-- Cytoscape.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.19.0/cytoscape.min.js"></script>
+
+    <!-- Custom Cytoscape Script -->
+    <script src="{{ url_for('static', filename='javascript/cytoscape_scripts.js') }}"></script>
+
+    <!-- Custom Validator Script -->
+    <script src="{{ url_for('static', filename='javascript/input_validator_script.js') }}"></script>
+
+{% endblock %}
+

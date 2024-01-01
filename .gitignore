@@ -1,0 +1,11 @@
+# Ignore all .log files
+*.log
+
+# Ignore the vrtuel environment directory
+venv/
+env/
+__pycahce__/
+*.pyc
+
+# Ignore node_module directory
+node_modules/

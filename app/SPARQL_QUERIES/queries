@@ -1,0 +1,57 @@
+## AOP Datadump
+
+SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?ker_genes ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes
+WHERE
+{
+  BIND(aop:17 AS ?aop_id)
+
+  ?AOP a aopo:AdverseOutcomePathway ;
+         dc:identifier ?aop_id;
+         aopo:has_molecular_initiating_event ?MIE ;
+         rdfs:label ?aop_label ;
+         aopo:has_key_event_relationship ?KER ;
+         aopo:has_key_event ?KE_up ;
+         aopo:has_adverse_outcome ?AO .
+
+  ?KER a aopo:KeyEventRelationship ;
+         aopo:has_upstream_key_event ?KE_up ;
+         aopo:has_downstream_key_event ?KE_dwn .
+         #edam:data_1025 ?genes .
+  OPTIONAL { ?KER edam:data_1025 ?ker_genes .}
+
+  #ke, data dump - all except AO, need to make one for AO
+  ?KE_up dc:identifier ?ke_id ;
+         rdfs:label ?ke_label ;
+         dc:title ?ke_title .
+
+  OPTIONAL { ?KE_up edam:data_1025 ?ke_genes .}
+}
+
+## ao_dump
+
+SELECT distinct ?ao ?ao_id ?label ?name ?genes ?aop_id
+WHERE{
+
+  BIND(aop:17 AS ?aop_id)
+
+  ?aop a aopo:AdverseOutcomePathway ;
+         dc:identifier ?aop_id ;
+         aopo:has_adverse_outcome ?ao .
+
+  ?ao a aopo:KeyEvent;
+      dc:identifier ?ao_id ;
+      rdfs:label ?label ;
+      dc:title ?name .
+
+  OPTIONAL { ?ao edam:data_1025 ?genes .}
+}
+
+#dump all stressor data
+SELECT ?stressor ?str_id ?str_label ?str_title
+WHERE
+{
+  ?stressor a nci:C54571 ;
+              dc:identifier ?str_id ;
+              rdfs:label ?str_label ;
+              dc:title ?str_title .
+}
