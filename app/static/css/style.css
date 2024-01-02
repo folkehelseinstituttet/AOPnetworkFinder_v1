@@ -124,3 +124,8 @@ body {
     margin-left: auto; /* Adjusted to percentage */
     width: 90%;
 }
+
+nav img {
+    height: 2vw;
+    margin-right: 30%;
+}
