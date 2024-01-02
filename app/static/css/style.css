@@ -12,8 +12,8 @@ body {
 
 #cy {
     background-color: white; /* Specific background for Cytoscape container */
-    width: 100%; /* Adjusted to percentage */
-    min-height: 42vw; /* Adjusted for a responsive height, or set a specific percentage */
+    width: 100%;
+    min-height: 42vw;
 }
 
 /* Styles for the parent container that holds everything */
@@ -26,15 +26,15 @@ body {
 
 /* If .cytoscape-container is used as a wrapper for #cy */
 .cytoscape-container {
-    width: 100%; /* Adjusted to percentage */
-    min-height: 42vw; /* Responsive height relative to viewport width */
+    width: 100%;
+    min-height: 42vw;
 }
 
 /* Styles for the left-side container */
 .leftside-container {
     /*background-color: blue;*/
-    width: 25%; /* Adjusted to percentage */
-    min-height: 42vw; /* Responsive height relative to viewport width */
+    width: 25%;
+    min-height: 42vw;
 }
 
 /* Styles for the right-side container */
@@ -42,23 +42,25 @@ body {
     display: flex;
     flex-direction: column; /* Align children vertically */
     align-items: center; /* Center align the children horizontally */
-    width: 40%; /* Adjusted to percentage */
-    min-height: 42vw; /* Adjust as needed */
+    width: 40%;
+    min-height: 42vw;
 }
 
+/* Styles for the bottom container */
 .bottom-container {
-    display: grid; /* Enable CSS Grid layout */
+    display: grid;
     grid-template-columns: 16.5% 58.3% 12.6% 12.6%; /* horizontal grid template 4 columns*/
     gap: 5%
     align-items: center;
-    min-height: 5vh; /* Responsive height relative to viewport height */
+    min-height: 5vh;
 }
 
+/* Styles for the top container */
 .top-container {
-    display: grid; /* Enable CSS Grid layout */
-    place-items: center; /* Center items both horizontally and vertically */
-    width: 100%; /* Full width of its parent */
-    min-height: 5vh; /* Responsive height relative to viewport height */
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 5vh;
 }
 
 .search-group {
@@ -81,7 +83,7 @@ body {
 
 /* Styles for the search button */
 .search-button {
-    margin-left: auto; /* Adjusted to percentage */
+    margin-left: auto;
     width: 100%;
 }
 
@@ -99,7 +101,7 @@ body {
 }
 
 .checkbox-group {
-    width: 80%; /* Match the width of search fields */
+    width: 80%;
     margin-top: auto; /* Pushes the group to the bottom */
     margin-right: auto;
     text-align: left; /* Align checkboxes to the left */
@@ -116,15 +118,16 @@ body {
 }
 
 #saveButtonLog {
-    margin-left: auto; /* Adjusted to percentage */
+    margin-left: auto;
     width: 90%;
 }
 
 #mergeButtonKeyEvent {
-    margin-left: auto; /* Adjusted to percentage */
+    margin-left: auto;
     width: 90%;
 }
 
+/*navbar - logo size and placement */
 nav img {
     height: 2vw;
     margin-right: 30%;
