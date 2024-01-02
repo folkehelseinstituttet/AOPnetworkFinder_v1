@@ -15,4 +15,4 @@ Figure 2  Representation of qAOP thinking in probabilistic way. A hypothetical A
 
 The Current GUI of the AOP_Visualizer webpage:
 
- ![main window](/images/AOP_Visualizer_GUI_web-page)
+ ![main window](/images/AOP_Visualizer_GUI_web-page.png)
