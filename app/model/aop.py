@@ -1,6 +1,6 @@
-from ..SPARQL_QUERIES.visualizer_queries import *
+from app.SPARQL_QUERIES.visualizer_queries import *
 import re
-from key_event import *
+from app.model.key_event import *
 
 
 class aop:

@@ -17,7 +17,7 @@
 
         <div class="leftside-container">
             <!--button for searching -->
-            <button id="searchButtonAOP" class="search-button">Search AOP</button>
+            <button type="submit" id="searchButtonAOP" class="search-button">Search AOP</button>
         </div>
 
                 <!-- Centered Div for Cytoscape graph -->
@@ -31,11 +31,13 @@
             <!-- input fields for AOP and KE (will add KE Degree later) -->
 
             <!-- Search Field 1 -->
-            <div class="search-group">
-                <label for="searchFieldAOP">AOP IDs:</label>
-                <!--AOP search field -->
-                <input type="text" id="searchFieldAOP" class="search-field" placeholder="17 or 17,260,107 ..." />
-            </div>
+            <form id="aopSearchForm" action="searchAops" method="post">
+                <div class="search-group">
+                    <label for="searchFieldAOP">AOP IDs:</label>
+                    <!--AOP search field -->
+                    <input type="text" id="searchFieldAOP" name="searchFieldAOP" class="search-field" placeholder="17 or 17,260,107 ..." />
+                </div>
+            </form>
 
             <div class="search-group">
                 <label for="searchFieldKe">KE IDs:</label>
@@ -73,6 +75,9 @@
 
     <!-- Custom Cytoscape Script -->
     <script src="{{ url_for('static', filename='javascript/cytoscape_scripts.js') }}"></script>
+
+    <!-- Custom Cytoscape Script -->
+    <script src="{{ url_for('static', filename='javascript/visualizer_script.js') }}"></script>
 
     <!-- Custom Validator Script -->
     <script src="{{ url_for('static', filename='javascript/input_validator_script.js') }}"></script>
