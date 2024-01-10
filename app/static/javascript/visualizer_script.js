@@ -5,12 +5,16 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
 
         var searchValue = document.getElementById("searchFieldAOP").value;
+        var genesChecked = document.getElementById("checkedBoxGene").checked;
+
         if (searchValue) {
+            var formData = new FormData();
 
-            var form = document.getElementById("aopSearchForm");
-            var formData = new FormData(form);
+            formData.append("searchFieldAOP", searchValue);
 
-            render_graph('/searchAops', formData)
+            formData.append("checkboxGene", genesChecked ? "1" : "0");
+
+            render_graph('/searchAops', formData);
 
         } else {
             alert("Please enter an AOP ID");
@@ -50,6 +54,13 @@ function render_graph(url_string, formData) {
                     style: {
                         'label': 'data(id)',
                         'background-color': '#ffA500'  // Orange for 'Key Event'
+                    }
+                },
+                {
+                    selector: 'node[ke_type="genes"]',
+                    style: {
+                        'label': 'data(id)',
+                        'background-color': '#0000FF'  // Blue for 'genes'
                     }
                 },
                 {

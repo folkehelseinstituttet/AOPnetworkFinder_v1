@@ -26,14 +26,16 @@ def page_three():
 def search_aops():
     # Retrieve the query from the form
     aop_query = request.form.get('searchFieldAOP')
+    gene_checkbox = request.form.get('checkboxGene')
 
     logging.debug(f"aop_query from the search field in front-end {aop_query}")
     print('Test aopQuery: {}'.format(aop_query))
+    print('Test gene_checkbox: {}'.format(gene_checkbox))
 
     #handle if there is no data
     if aop_query is None:
         return render_template('visualizer_page_one.html', data=None)
 
-    aop_cytoscape = visualizer_sv.visualize_aop_user_input(aop_query)
+    aop_cytoscape = visualizer_sv.visualize_aop_user_input(aop_query, gene_checkbox)
     print('Output before sending to front-end: {}'.format(aop_cytoscape))
     return jsonify(aop_cytoscape['elements'])

@@ -106,9 +106,9 @@ def plot(aop_list, unique_key_events):
 '''Helper function for plotting genes'''
 def gene_plotter_helper(ke_node, aop_graph):
     if ke_node.get_nr_genes() > 0:
-        print('genes_nr', ke_node.get_list_of_genes())
+        #print('genes_nr', ke_node.get_list_of_genes())
         for genes in ke_node.get_list_of_genes():
-            print(genes)
+            #print(genes)
             aop_graph.add_node(genes, ke_type='genes')
             aop_graph.add_edge(genes, ke_node)
 
