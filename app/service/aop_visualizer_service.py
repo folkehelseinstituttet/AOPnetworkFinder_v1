@@ -32,7 +32,8 @@ def visualize_aop_user_input(aop_ids, checkbox_gene):
             aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
             return aop_cytoscape
     elif len(set_of_unique_aops) >= 1:
-        visualize_multiple_aops(set_of_unique_aops)
+
+        return visualize_multiple_aops(set_of_unique_aops, genesCheckedFlag)
 
     return None
 
@@ -43,7 +44,24 @@ def filter_aops(aop_ids):
     print('Implement filter functionality')
 
 #Ability to display two or more AOPs
-def visualize_multiple_aops(set_of_unique_aops):
+def visualize_multiple_aops(set_of_unique_aops, genesCheckedFlag):
 
     aop_rdf_data = sq.multiple_aop_dump(set_of_unique_aops)
-    print('test')
+    list_of_aop_objects = []
+    list_of_unique_ke = []
+
+    for x in set_of_unique_aops:
+        # TODO: Dont use aop_dump use multiple_aop_dump instead on final version
+        tmp_aop_date = sq.aop_dump(x)
+        if len(aop_rdf_data['results']['bindings']) != 0:
+            new_aop = aop.aop(tmp_aop_date, list_of_unique_ke, False)
+            list_of_aop_objects.append(new_aop)
+
+
+    aop_networkx_graph = plot_aop.plot(list_of_aop_objects, list_of_unique_ke)
+
+    relabeled_graph = plot_aop.ke_obj_to_str(aop_networkx_graph, genesCheckedFlag)
+
+    #can convert the networkx graph to a valid Cytoscape graph. Which is used to display the graph to the user in the front-end
+    aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
+    return aop_cytoscape
