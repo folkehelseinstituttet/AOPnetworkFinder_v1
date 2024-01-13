@@ -3,16 +3,22 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("searchButtonAOP").addEventListener("click", function(event) {
         console.log('Pressing the button searchButtonAOP')
         event.preventDefault();
+        //Data that will be sent to the backend for processing
+        var formData = new FormData();
 
         var searchValue = document.getElementById("searchFieldAOP").value;
         var genesChecked = document.getElementById("checkedBoxGene").checked;
 
+        // Add the filter checkboxes to formData
+        document.querySelectorAll('#checkbox-filter input[type="checkbox"]').forEach(function(checkbox) {
+            formData.append(checkbox.name, checkbox.checked ? "1" : "0");
+        });
+
+        formData.append("checkboxGene", genesChecked ? "1" : "0");
+
         if (searchValue) {
-            var formData = new FormData();
 
             formData.append("searchFieldAOP", searchValue);
-
-            formData.append("checkboxGene", genesChecked ? "1" : "0");
 
             render_graph('/searchAops', formData);
 

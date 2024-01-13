@@ -959,10 +959,10 @@ def aop_status(list_of_statuses):
     # concatenate multiple_ke, used inside the query
     for one_filter in list_of_statuses:
         if skip_or:
-            aop_filter += '?status = ' + one_filter
+            aop_filter += "?status = '" + one_filter + "'"
             skip_or = False
         else:
-            aop_filter += ' || ?status = ' + one_filter
+            aop_filter += " || ?status = '" + one_filter + "'"
     print('multiple_aop_filter: ', aop_filter)
 
     sparql.setReturnFormat(JSON)
