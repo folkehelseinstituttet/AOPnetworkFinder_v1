@@ -6,9 +6,13 @@
     <div class="top-container">
             <!-- Search Field 1 -->
         <div class="search-group" id="searchGroupStressor">
-            <label for="searchFieldStressor">Stressor:</label>
+            <label for="stressorDropdown">Stressor:</label>
             <!--Stressor search field -->
-            <input type="text" id="searchFieldStressor" class="search-field-stressor" placeholder="Stressor Name" />
+            <!-- <input type="text" id="searchFieldStressor" class="search-field-stressor" placeholder="Stressor Name" /> -->
+            <select id="stressorDropdown">
+            <!-- Options will be added here -->
+                <option></option>
+            </select>
         </div>
 
     </div>
@@ -42,7 +46,7 @@
             <div class="search-group">
                 <label for="searchFieldKe">KE IDs:</label>
                 <!-- KE search field -->
-                <input type="text" id="searchFieldKE" class="search-field" placeholder="1253 or 1253,281,46 ..." />
+                <input type="text" id="searchFieldKE" name="searchFieldKE" class="search-field" placeholder="1253 or 1253,281,46 ..." />
             </div>
 
             <!-- Checkboxes at the bottom -->
@@ -68,8 +72,43 @@
         <!--button for saving user Actions -->
         <button id="saveButtonLog" class="search-button">Save Log File</button>
         <!--Merge Key Event Nodes -->
-        <button id="mergeButtonKeyEvent" class="search-button">Merge KE:</button>
+        <button id="mergeButtonKeyEvent" class="search-button" type="button" onclick="console.log('Button clicked')">Merge KE:</button>
+    </div>
 
+    <div id="mergePopup" class="modal">
+        <!-- popup Window for merging KE -->
+        <div id="mergePopup-content" class="popupMerge-content">
+    <!-- Top container -->
+            <div class="popup-top">
+              <div class="input-group">
+                <label for="inputOne">Input One:</label>
+                <input type="text" id="inputOne" name="inputOne">
+              </div>
+
+              <div class="input-group">
+                <label for="inputTwo">Input Two:</label>
+                <input type="text" id="inputTwo" name="inputTwo">
+              </div>
+
+              <button id="processButton">Process</button>
+            </div>
+
+            <!-- Bottom containers wrapper -->
+            <div class="popup-bottom-wrapper">
+              <!-- Second container -->
+              <div class="modal-second">
+                <!-- Content for the second container -->
+                  <div id="dynamicButtons"></div> <!-- Container for dynamic buttons -->
+              </div>
+
+              <!-- Third container -->
+              <div class="modal-third">
+                <button id="thirdContainerButton">Third Button</button>
+              </div>
+            </div>
+
+            <span class="close">&times;</span>
+        </div>
     </div>
 
     <!-- Cytoscape.js CDN -->

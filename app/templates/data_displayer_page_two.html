@@ -1,5 +1,82 @@
 {% extends "base_template.html" %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_data_displayer.css') }}">
+{% endblock %}
+
 {% block content %}
-    <h1>Test page 3</h1>
+    <h1 class="text-center" id="main_text">AOP-Wiki Data Extraction</h1>
+
+    <div class="top-container">
+            <!-- Search Field 1 -->
+        <form id="aop_search_form" action="data-extraction-submit" method="post">
+            <div class="search-group" id="searchGroupAOPs">
+                <label for="searchFieldAOPs">AOPs:</label>
+                <!--Aops search field -->
+                <input type="text" id="searchFieldAOPs" name="searchFieldAOPs" class="search-field-aops" placeholder="17 or 17,260,12,13..." />
+            </div>
+        </form>
+
+        <form id="ke_search_form" action="data-extraction-submit" method="post">
+            <div class="search-group" id="searchGroupKE">
+                <label for="searchFieldKEs">KE:</label>
+                <!--Aops search field -->
+                <input type="text" id="searchFieldKEs" name="searchFieldKEs" class="search-field-kes" placeholder="17 or 17,260,12,13..." />
+            </div>
+        </form>
+    </div>
+
+    <div class="parent-container">
+
+        <div class="left-container">
+            <div class="left-checkboxes" id="aop_checkboxes">
+                <!-- Group of six checkboxes -->
+                <form>
+                    <input type="checkbox" id="aop_chx_abstract" name="aop_chx_abstract"><label for="aop_chx_abstract">aop_chx_abstract</label><br>
+                    <input type="checkbox" id="aop_chx_stressor" name="aop_chx_stressor"><label for="aop_chx_stressor">aop_chx_stressor</label><br>
+                    <input type="checkbox" id="aop_chx_ke" name="aop_chx_ke"><label for="aop_chx_ke">aop_chx_ke</label><br>
+                    <input type="checkbox" id="aop_chx_mie" name="aop_chx_mie"><label for="aop_chx_mie">aop_chx_mie</label><br>
+                    <input type="checkbox" id="aop_chx_ao" name="aop_chx_ao"><label for="aop_chx_ao">aop_chx_ao</label><br>
+                    <input type="checkbox" id="aop_chx_author" name="aop_chx_author"><label for="aop_chx_author">aop_chx_author</label><br>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="dynamicTable">
+                <!-- Dynamic table rows and columns will be inserted here -->
+            </table>
+        </div>
+
+        <div class="rigth-container">
+            <div class="right-checkboxes" id="ke_checkboxes">
+                <!-- Group of five checkboxes -->
+                <form>
+                    <input type="checkbox" id="ke_chx_in_aop" name="ke_chx_in_aop"><label for="ke_chx_in_aop">ke_chx_in_aop</label><br>
+                    <input type="checkbox" id="ke_chx_stressor" name="ke_chx_stressor"><label for="ke_chx_stressor">ke_chx_stressor</label><br>
+                    <input type="checkbox" id="ke_chx_genes" name="ke_chx_genes"><label for="ke_chx_genes">ke_chx_genes</label><br>
+                    <input type="checkbox" id="ke_chx_cell_type" name="ke_chx_cell_type"><label for="ke_chx_cell_type">ke_chx_cell_type</label><br>
+                    <input type="checkbox" id="ke_chx_description" name="ke_chx_description"><label for="ke_chx_description">ke_chx_description</label><br>
+                    <input type="checkbox" id="ke_chx_measurements" name="ke_chx_measurements"><label for="ke_chx_measurements">ke_chx_measurements</label><br>
+                <!-- Add more checkboxes here -->
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-container">
+
+        <div class="actions">
+            <!--button for exporting to Cytoscape-->
+            <button id="submitBtn" type="submit" class="search-button">Submit</button>
+            <!--button for saving user Actions -->
+            <button id="saveCsvBtn" class="search-button">Save as CSV</button>
+            <!--Merge Key Event Nodes -->
+            <button id="saveExcelBtn" class="search-button" type="button" onclick="console.log('Button clicked')">Save as Excel</button>
+        </div>
+    </div>
+
+    <!-- data_displayer_page Script -->
+    <script src="{{ url_for('static', filename='javascript/data_displayer_script.js') }}"></script>
 {% endblock %}

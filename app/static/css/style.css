@@ -80,6 +80,19 @@ body {
     margin-bottom: 8%;
 }
 
+.rightside-container label[for="searchFieldKe"],
+.rightside-container #searchFieldKE {
+  align-self: stretch; /* This will make them stretch to the full width of the container */
+  width: 100%; /* Ensure they take the full width */
+}
+
+
+.rightside-container label[for="searchFieldAOP"],
+.rightside-container #searchFieldAOP {
+  align-self: stretch; /* This will make them stretch to the full width of the container */
+  width: 100%; /* Ensure they take the full width */
+}
+
 
 /* Styles for the search button */
 .search-button {
@@ -127,8 +140,123 @@ body {
     width: 90%;
 }
 
+#stressorDropdown {
+    width: 74%;
+}
+
 /*navbar - logo size and placement */
 nav img {
     height: 2vw;
     margin-right: 30%;
+}
+
+/* The popup window */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    display: flex; /* Use Flexbox for layout */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}
+
+/* Popup Content */
+.popupMerge-content {
+    background-color: #fefefe;
+    width: 65%;
+    height: 65%;
+    overflow-y: auto;
+    border: 1px solid #888;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.popup-top{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.input-group label {
+  margin-right: 5px; /* Space between label and input */
+}
+
+.popup-bottom-wrapper {
+  display: flex;
+  flex: 1; /* Take up remaining space */
+  height: 100%;
+}
+
+.modal-second {
+  display: flex; /* Makes .modal-second a flex container */
+  flex-direction: column; /* Aligns children vertically; use row for horizontal alignment */
+  align-items: center; /* Centers children horizontally in the current flex direction (column) */
+  justify-content: center; /* Centers children vertically in the current flex direction (column) */
+  flex: 3; /* Takes 3/4 of the space */
+  overflow-y: auto; /* Keeps the overflow content scrollable */
+  padding: 10px;
+  text-align: center; /* Centers text for single-line or inline children */
+}
+
+.modal-second button {
+  width: calc(50%); /* Adjusts the width to fill the container, accounting for padding */
+  margin: 5px 0; /* Adds some margin above and below each button */
+}
+
+.dynamicButtons {
+    width: 150px; /* Fixed width */
+    height: 50px; /* Fixed height */
+    margin: 5px; /* Space around buttons */
+}
+
+.modal-third {
+  flex: 1; /* Takes up 1/4 of the space */
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Align button to the bottom */
+}
+
+/* The Close Button */
+.close {
+/*    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+*/
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.merge-option-button {
+    /* Default styles */
+}
+
+.merge-option-button.active {
+    background-color: #4CAF50; /* Green background for active button */
+    color: white;
 }

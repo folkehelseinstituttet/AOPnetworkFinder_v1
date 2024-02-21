@@ -201,6 +201,9 @@ def one_aop(check_box_flag, ke_ids='0', aop_ids='0'):
     )
 
     tmp_flags = check_box_flag  # TODO: add functionality when checkboxes are implemented.
+    print('inside query checkboxes tuples: {}'.format(check_box_flag))
+    print('inside query ke: {}'.format(ke_ids))
+    print('inside query aops: {}'.format(aop_ids))
 
     '''first check if ke_ids and aop_ids for default value 0'''
     ke_flag = False
@@ -232,63 +235,63 @@ def one_aop(check_box_flag, ke_ids='0', aop_ids='0'):
     for chx_name, bool_chx in tmp_flags:
         # abstract checkbox
         if aop_flag is True and ke_flag is False:
-            if chx_name == 'abstract' and bool_chx == True:
+            if chx_name == 'abstract' and bool_chx == '1':
                 get_abstract = aop_abstract()
                 # append to incomplete query
                 incomplete_query += '\n' + get_abstract
 
             # stressor checkbox
-            if chx_name == 'stressor' and bool_chx == True:
+            if chx_name == 'stressor' and bool_chx == '1':
                 get_stressor = aop_prototypical_stressor()
                 # append to incomplete query
                 incomplete_query += '\n' + get_stressor
 
             # ke checkbox
-            if chx_name == 'ke' and bool_chx == True:
+            if chx_name == 'ke' and bool_chx == '1':
                 get_ke = aop_has_key_events()
                 # append to incomplete query
                 incomplete_query += '\n' + get_ke
 
             # mie checkbox
-            if chx_name == 'mie' and bool_chx == True:
+            if chx_name == 'mie' and bool_chx == '1':
                 get_mie = aop_mie()
                 # append to incomplete query
                 incomplete_query += '\n' + get_mie
 
             # ao checkbox
-            if chx_name == 'ao' and bool_chx == True:
+            if chx_name == 'ao' and bool_chx == '1':
                 get_ao = aop_ao()
                 # append to incomplete query
                 incomplete_query += '\n' + get_ao
 
-            if chx_name == 'aop_author' and bool_chx == True:
+            if chx_name == 'aop_author' and bool_chx == '1':
                 get_author = aop_author()
                 # append to incomplete query
                 incomplete_query += '\n' + get_author
 
         elif aop_flag is False and ke_flag is True:
 
-            if chx_name == 'In AOP' and bool_chx == True:
+            if chx_name == 'In AOP' and bool_chx == '1':
                 get_in_aop = ke_in_aop()
                 incomplete_query += '\n' + get_in_aop
 
-            if chx_name == 'ke stressor' and bool_chx == True:
+            if chx_name == 'ke stressor' and bool_chx == '1':
                 get_ke_stressor = ke_stressor()
                 incomplete_query += '\n' + get_ke_stressor
 
-            if chx_name == 'ke genes' and bool_chx == True:
+            if chx_name == 'ke genes' and bool_chx == '1':
                 get_ke_genes = ke_genes()
                 incomplete_query += '\n' + get_ke_genes
 
-            if chx_name == 'ke cell type context' and bool_chx == True:
+            if chx_name == 'ke cell type context' and bool_chx == '1':
                 get_ke_cell_type = ke_cell_type()
                 incomplete_query += '\n' + get_ke_cell_type
 
-            if chx_name == 'ke description' and bool_chx == True:
+            if chx_name == 'ke description' and bool_chx == '1':
                 get_ke_description = ke_description()
                 incomplete_query += '\n' + get_ke_description
 
-            if chx_name == 'ke measurements' and bool_chx == True:
+            if chx_name == 'ke measurements' and bool_chx == '1':
                 get_ke_measurements = ke_measurements()
                 incomplete_query += '\n' + get_ke_measurements
 
