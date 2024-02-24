@@ -285,7 +285,7 @@ def multiple_aop_dump(list_of_aop_id):
         print('variable inside query: {}'.format(multiple_aop))
         sparql.setReturnFormat(JSON)
         sparql.setQuery("""
-SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?ker_genes ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes ?ke_dwn_label ?ke_dwn_id ?ke_dwn_title ?ke_dwn_genes
+SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes ?ke_dwn_label ?ke_dwn_id ?ke_dwn_title ?ke_dwn_genes
 WHERE
 {
 
@@ -302,7 +302,6 @@ WHERE
          aopo:has_upstream_key_event ?KE_up ;
          aopo:has_downstream_key_event ?KE_dwn .
          #edam:data_1025 ?genes .
-  OPTIONAL { ?KER edam:data_1025 ?ker_genes .}
 
   #ke, data dump - all except AO, need to make one for AO
   ?KE_up dc:identifier ?ke_id ;
