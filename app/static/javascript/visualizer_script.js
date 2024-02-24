@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-
+        logCytoscape();
     });
 });
 
@@ -345,6 +345,11 @@ function logUserAction(actionDescription) {
 
 function logHeaderName(logDescriptions) {
     globalUserActionsLog.push(`${logDescriptions}`)
+}
+
+function logCytoscape() {
+    logHeaderName("Export to Cytoscape");
+    logUserAction("Graph has been saved in the '.graphml' format.");
 }
 
 function logUserInput(formData) {
