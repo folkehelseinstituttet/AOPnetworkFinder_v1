@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 
 import networkx
 from flask import jsonify
@@ -12,9 +13,8 @@ import textdistance
 
 def visualize_aop_user_input(aop_ids, checkbox_gene, under_development_chx, endorsed_chx, under_review_chx,
                              approved_chx):
-    aop_rdf_data = []
+
     list_of_aop_objects = []
-    filtered_aop_list = []
 
     genesCheckedFlag = checkbox_gene == '1'  # Will be false if its not 1
     under_development_flag = under_development_chx == '1'
@@ -52,7 +52,7 @@ def visualize_aop_user_input(aop_ids, checkbox_gene, under_development_chx, endo
             return aop_cytoscape, list(set_of_unique_aops)
     elif len(set_of_unique_aops) >= 1:
 
-        return visualize_multiple_aops(set_of_unique_aops, genesCheckedFlag), list(set_of_unique_aops)
+        return visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag), list(set_of_unique_aops)
 
     return None, []
 
@@ -92,12 +92,11 @@ def filter_aops(under_development_chx, endorsed_chx, under_review_chx, approved_
     return only_valid_aops
 
 
-# Ability to display two or more AOPs
+# DEPRECATED
 def visualize_multiple_aops(set_of_unique_aops, genesCheckedFlag):
     aop_rdf_data = sq.multiple_aop_dump(set_of_unique_aops)
     list_of_aop_objects = []
     list_of_unique_ke = []
-
     for x in set_of_unique_aops:
         # TODO: Dont use aop_dump use multiple_aop_dump instead on final version
         tmp_aop_date = sq.aop_dump(x)
@@ -111,6 +110,39 @@ def visualize_multiple_aops(set_of_unique_aops, genesCheckedFlag):
 
     # can convert the networkx graph to a valid Cytoscape graph. Which is used to display the graph to the user in the front-end
     aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
+    print('multiple_aop_query {}:'.format(aop_rdf_data))
+    return aop_cytoscape
+
+
+def visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag):
+    aop_rdf_data = sq.multiple_aop_dump(set_of_unique_aops)
+    list_of_aop_objects = []
+    list_of_unique_ke = []
+    # Initialize a dictionary to group entries by AOP identifier
+    grouped_by_aop = defaultdict(
+        lambda: {"head": aop_rdf_data["head"], "results": {"distinct": False, "ordered": True, "bindings": []}})
+
+    # Iterate over each entry in the 'bindings' list
+    for entry in aop_rdf_data['results']['bindings']:
+        # Extract the AOP identifier from the entry
+        aop_id = entry['AOP']['value'].split('/')[-1]  # Extracts the AOP ID
+        grouped_by_aop[aop_id]["results"]["bindings"].append(entry)
+
+    for aop_data in grouped_by_aop:
+        # initiate aops
+        new_aop_object = aop.aop(grouped_by_aop[aop_data], list_of_unique_ke, False)
+        list_of_aop_objects.append(new_aop_object)
+
+    aop_networkx_graph = plot_aop.plot(list_of_aop_objects, list_of_unique_ke)
+
+    relabeled_graph = plot_aop.ke_obj_to_str(aop_networkx_graph, genesCheckedFlag)
+
+    # can convert the networkx graph to a valid Cytoscape graph. Which is used to display the graph to the user in the front-end
+    aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
+    print('group_by_aop:')
+    for aop_inside in grouped_by_aop:
+        print(aop_inside)
+
     return aop_cytoscape
 
 
