@@ -404,7 +404,7 @@ function logUserInput(formData) {
 
 function loggingMergeActions(keepNode,removeNode){
     logHeaderName("\n")
-    logUserAction("Merging the KE node: ${removeNode} into the KE: ${keepNode}")
+    logUserAction(`Merging the KE node: ${removeNode} into the KE: ${keepNode}`)
 }
 
 function loggingAopVisualized(aop_before_filter, aop_after_filter){
