@@ -110,7 +110,7 @@ def search_aops():
         'aop_before_filter': aop_list_filtered,
         'aop_after_filter': aop_after_filter
     }
-    print('Delete later')
+    #print('Delete later')
     print('Output before sending to front-end: {}'.format(final_response))
     return jsonify(final_response)
 
