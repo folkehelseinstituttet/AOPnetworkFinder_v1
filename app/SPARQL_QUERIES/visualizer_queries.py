@@ -673,6 +673,138 @@ WHERE {
     except Exception as e:
         print(e)
 
+def ke_degree_1_multiple_dump(ke_ids):
+    '''Degree 1 of given KEs'''
+    # Convert ke_id list to a SPARQL VALUES string
+    ke_ids_values = " ".join([f"(aop.events:{ke_id})" for ke_id in ke_ids])
+
+    sparql = SPARQLWrapper("https://aopwiki.rdf.bigcat-bioinformatics.org/sparql")
+    sparql.setReturnFormat(JSON)
+    query = f"""
+        SELECT ?ker ?ke_id ?keRoot_name ?keRoot_label ?ke_dwn ?keDwn_name ?keDwn_label ?ke_up ?keUp_name ?keUp_label
+        WHERE {{
+          VALUES (?ke_id) {{
+            {ke_ids_values}
+          }}
+          ?keRoot a aopo:KeyEvent;
+                  dc:identifier ?ke_id;
+                  dc:title ?keRoot_name ;
+                  rdfs:label ?keRoot_label .
+          {{
+             ?ker a aopo:KeyEventRelationship ;
+                   aopo:has_upstream_key_event ?ke_id ;
+                   aopo:has_downstream_key_event ?ke_dwn .
+
+                 OPTIONAL{{?keDwn a aopo:KeyEvent;
+               dc:identifier ?ke_dwn;
+               dc:title ?keDwn_name ;
+               rdfs:label ?keDwn_label .}}
+          }}
+          UNION
+          {{
+              ?ker a aopo:KeyEventRelationship ;
+                   aopo:has_upstream_key_event ?ke_up ;
+                   aopo:has_downstream_key_event ?ke_id .
+
+             OPTIONAL{{?keUp a aopo:KeyEvent;
+               dc:identifier ?ke_up;
+               dc:title ?keUp_name ;
+               rdfs:label ?keUp_label .}}
+          }}
+        }}
+    """
+
+    sparql.setQuery(query)
+    try:
+        ret = sparql.query()
+        json_format = ret.convert()
+        return json_format
+    except Exception as e:
+        print(e)
+
+
+def ke_degree_2_multiple_dump(ke_ids):
+    '''Degree 2 of given KEs'''
+    # Convert ke_ids list to a SPARQL VALUES string
+    ke_id_values = " ".join([f"(aop.events:{ke_id})" for ke_id in ke_ids])
+
+    sparql = SPARQLWrapper("https://aopwiki.rdf.bigcat-bioinformatics.org/sparql")
+    sparql.setReturnFormat(JSON)
+    query_template = """
+                    SELECT ?ker ?ke_id ?keRoot_name ?keRoot_label ?lvl_1_up ?lvl_1_up_name ?lvl_1_up_label ?lvl_1_dwn ?lvl_1_dwn_name ?lvl_1_dwn_label ?lvl_2_up ?lvl_2_up_name ?lvl_2_up_label ?lvl_2_dwn ?lvl_2_dwn_name ?lvl_2_dwn_label
+WHERE {
+  VALUES (?ke_id) {{values}}
+  #Degree 2
+   {
+     ?ker a aopo:KeyEventRelationship ;
+           aopo:has_upstream_key_event ?lvl_2_up ;
+           aopo:has_downstream_key_event ?lvl_1_dwn .
+
+                  OPTIONAL{?keUp_2 a aopo:KeyEvent;
+           dc:identifier ?lvl_2_up;
+           dc:title ?lvl_2_up_name ;
+           rdfs:label ?lvl_2_up_label .}
+   }
+      UNION
+  {
+    ?ker a aopo:KeyEventRelationship ;
+           aopo:has_upstream_key_event ?lvl_1_up ;
+           aopo:has_downstream_key_event ?lvl_2_dwn .
+
+                 OPTIONAL{?keDwn_2 a aopo:KeyEvent;
+           dc:identifier ?lvl_2_dwn;
+           dc:title ?lvl_2_dwn_name ;
+           rdfs:label ?lvl_2_dwn_label .}
+  }
+
+  {
+    SELECT ?ke_id ?keRoot_name ?keRoot_label ?lvl_1_up ?lvl_1_up_name ?lvl_1_up_label ?lvl_1_dwn ?lvl_1_dwn_name ?lvl_1_dwn_label
+    WHERE {
+      # Degree 1
+
+      ?keRoot a aopo:KeyEvent;
+           dc:identifier ?ke_id;
+           dc:title ?keRoot_name ;
+           rdfs:label ?keRoot_label .
+
+        {
+                  ?ker a aopo:KeyEventRelationship ;
+           aopo:has_upstream_key_event ?ke_id ;
+           aopo:has_downstream_key_event ?lvl_1_dwn .
+
+             OPTIONAL{?keDwn a aopo:KeyEvent;
+           dc:identifier ?lvl_1_dwn;
+           dc:title ?lvl_1_dwn_name ;
+           rdfs:label ?lvl_1_dwn_label .}
+
+          }
+          UNION
+          {
+              ?ker a aopo:KeyEventRelationship ;
+                      aopo:has_upstream_key_event ?lvl_1_up ;
+                      aopo:has_downstream_key_event ?ke_id .
+
+              OPTIONAL{?keUp a aopo:KeyEvent;
+           dc:identifier ?lvl_1_up;
+           dc:title ?lvl_1_up_name ;
+           rdfs:label ?lvl_1_up_label .}
+          }
+    }
+  }
+}
+                    """
+    # Inject the VALUES string into the query
+    sparql_query = query_template.replace("{values}", ke_id_values)
+    sparql.setQuery(sparql_query)
+
+    try:
+        ret = sparql.query()
+        json_format = ret.convert()
+        return json_format
+    except Exception as e:
+        print(e)
+        return None
+
 
 def ke_degree_3_dump(ke_id):
     '''Degree 3 of a given KE'''

@@ -260,3 +260,10 @@ nav img {
     background-color: #4CAF50; /* Green background for active button */
     color: white;
 }
+
+.radio-container {
+  text-align: left;
+  width: 100%;
+  position: relative;
+  top: -2vh;
+}

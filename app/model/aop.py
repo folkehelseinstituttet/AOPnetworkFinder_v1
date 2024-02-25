@@ -23,6 +23,7 @@ class aop:
 
     # Read dictionary and give values to the aop and all key events.
     def read_json(self, existing_ke):
+
         # extract aop_id
         tmp_id = [x['aop_id'] for x in self.json_dictionary['results']['bindings']]
         for x in tmp_id:
@@ -51,11 +52,11 @@ class aop:
 
         # find all AO
         print('AO')
-        #if len(self.aop_identifier[0]) > 0:
+        # if len(self.aop_identifier[0]) > 0:
         print('json_dict: ', self.json_dictionary)
         print(self.aop_identifier)
         '''if AOP Identifier = 0, return none (query found an AOP, but got nothing from the sparql query)'''
-        #TODO: Rewrite the sparql query (fix the small bug)
+        # TODO: Rewrite the sparql query (fix the small bug)
         if self.aop_identifier == 0:
             '''Temporarily fix'''
             return
@@ -66,6 +67,8 @@ class aop:
         ##no dupes
         tmp_ke = []
 
+        ####for x in existing_ke:
+        ####    print('inside -- existing_ke -- in json_read {}'.format(x.get_ke_numerical_id()))
         # initiate and append AO
         print('initiate AO')
         for x in list_ao['results']['bindings']:
@@ -77,8 +80,8 @@ class aop:
                 extracted_id = re.findall(extract_id, x['ao']['value'])
                 retrive_ke = self.get_index_of_tuple_list(0, x['ao']['value'], existing_ke)
                 if retrive_ke is None:
-                    #there are no key events in the 'existing_ke' list that has the extracted_id's value
-                    #initiate new AO
+                    # there are no key events in the 'existing_ke' list that has the extracted_id's value
+                    # initiate new AO
 
                     ##initate AO
                     ao_identifier = x['ao_id']['value']
@@ -89,15 +92,16 @@ class aop:
 
                     self.adverse_outcome.append(new_ao)
                     self.list_of_key_events.append((new_ao, new_ao.get_ke_numerical_id()))
-                    #append to existing_ke list
+                    # append to existing_ke list
                     existing_ke.append((new_ao, new_ao.get_ke_numerical_id()))
                     new_ao.test_print_all()
                 else:
                     print('retrieve AOP')
-                    #retrieved_ke is not None, but is a Key event object (don't initiate new key event)
-                    #append retrieved_ke to list
+                    # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
+                    # append retrieved_ke to list
                     self.adverse_outcome.append(retrive_ke)
-                    self.list_of_key_events.append((existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
+                    self.list_of_key_events.append(
+                        (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
 
         for x in self.json_dictionary['results']['bindings']:
             if x['KE_up']['value'] not in tmp_ke:
@@ -108,7 +112,7 @@ class aop:
                     extract_id = "\\d+$"  # pattern
                     extracted_id = re.findall(extract_id, x['KE_up']['value'])
                     retrive_ke = self.get_index_of_tuple_list(0, x['KE_up']['value'], existing_ke)
-                    print('MIE_retrive value check: ',retrive_ke)
+                    print('MIE_retrive value check: ', retrive_ke)
                     if retrive_ke is None:
                         mie_identifier = x['ke_id']['value']
                         mie_label = x['ke_label']['value']
@@ -135,7 +139,8 @@ class aop:
                         # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                         # append retrieved_ke to list
                         self.molecular_init_event.append(retrive_ke)
-                        self.list_of_key_events.append((existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
+                        self.list_of_key_events.append(
+                            (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
                 else:
                     extract_id = "\\d+$"  # pattern
                     extracted_id = re.findall(extract_id, x['KE_up']['value'])
@@ -183,7 +188,7 @@ class aop:
                 except KeyError as e:
                     print(e)
 
-        #last, check if there is any KE_downstream that has not been appended to self.list_of_key_events
+        # last, check if there is any KE_downstream that has not been appended to self.list_of_key_events
         for x in self.json_dictionary['results']['bindings']:
             if x['KE_dwn']['value'] not in tmp_ke:
                 tmp_ke.append(x['KE_dwn']['value'])
@@ -278,32 +283,35 @@ class aop:
 
     # find and add pointers to upstream and downstream ke, for each KE in the list 'self.list_of_key_events'
     def add_up_and_downstream(self):
-        #read the json_dictionary again, but only look for upstream and downstream values
+        # read the json_dictionary again, but only look for upstream and downstream values
         for x in self.json_dictionary['results']['bindings']:
 
             index_ke_upstream = self.get_index_of_tuple_list(0, x['KE_up']['value'], self.list_of_key_events)
             index_ke_downstream = self.get_index_of_tuple_list(0, x['KE_dwn']['value'], self.list_of_key_events)
 
             if index_ke_upstream != None:
-                #current KE. If index_ke_downstream != none. add the KE object as downstream ke pointer for current KE
+                # current KE. If index_ke_downstream != none. add the KE object as downstream ke pointer for current KE
                 if index_ke_downstream != None:
                     print('Added upstream and downstream pointers')
-                    #current KE object from self.list_of_ke
-                    self.list_of_key_events[index_ke_upstream][0].add_downstream(self.list_of_key_events[index_ke_downstream][0])
-                    #do the reverse for downstream KE object, add upstream pointer to the current KE
-                    self.list_of_key_events[index_ke_downstream][0].add_upstream(self.list_of_key_events[index_ke_upstream][0])
+                    # current KE object from self.list_of_ke
+                    self.list_of_key_events[index_ke_upstream][0].add_downstream(
+                        self.list_of_key_events[index_ke_downstream][0])
+                    # do the reverse for downstream KE object, add upstream pointer to the current KE
+                    self.list_of_key_events[index_ke_downstream][0].add_upstream(
+                        self.list_of_key_events[index_ke_upstream][0])
 
-    #self.list_of_key_events contains list of tuples (ke_object, ke_numerical_id)
+    # self.list_of_key_events contains list of tuples (ke_object, ke_numerical_id)
     def get_index_of_tuple_list(self, tuple_index, search_ke_id, ke_list):
 
-        #if list is empty return none
+        # if list is empty return none
         '''if not ke_list:
             return None'''
 
         for list_index, t in enumerate(ke_list):
-            print('inside get_index_of_tuple_list: {}, search_ke_id: {}'.format( t[tuple_index].get_identifier(), search_ke_id))
+            print('inside get_index_of_tuple_list: {}, search_ke_id: {}'.format(t[tuple_index].get_identifier(),
+                                                                                search_ke_id))
             if t[tuple_index].get_identifier() == search_ke_id:
-                #found position
+                # found position
                 return list_index
         return None
 
@@ -334,8 +342,8 @@ class aop:
             retrive_ke = self.get_index_of_tuple_list(0, ao_ke['event_id'], existing_ke)
             print('ao ret: ', retrive_ke)
             if retrive_ke is None:
-                #there are no key events in the 'existing_ke' list that has the extracted_id's value
-                #initiate new AO
+                # there are no key events in the 'existing_ke' list that has the extracted_id's value
+                # initiate new AO
 
                 ##initate AO
                 ao_identifier = 'https://identifiers.org/aop.events/' + str(ao_ke['event_id'])
@@ -346,15 +354,16 @@ class aop:
 
                 self.adverse_outcome.append(new_ao)
                 self.list_of_key_events.append((new_ao, new_ao.get_ke_numerical_id()))
-                #append to existing_ke list
+                # append to existing_ke list
                 existing_ke.append((new_ao, new_ao.get_ke_numerical_id()))
                 new_ao.test_print_all()
             else:
                 print('retrieve AOP')
-                #retrieved_ke is not None, but is a Key event object (don't initiate new key event)
-                #append retrieved_ke to list
+                # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
+                # append retrieved_ke to list
                 self.adverse_outcome.append(retrive_ke)
-                self.list_of_key_events.append((existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
+                self.list_of_key_events.append(
+                    (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
 
         print(tmp_mie_list)
         for mie_ke in tmp_mie_list:
@@ -362,8 +371,8 @@ class aop:
             retrive_ke = self.get_index_of_tuple_list(0, mie_ke['event_id'], existing_ke)
             print('mie ret: ', retrive_ke)
             if retrive_ke is None:
-                #there are no key events in the 'existing_ke' list that has the extracted_id's value
-                #initiate new AO
+                # there are no key events in the 'existing_ke' list that has the extracted_id's value
+                # initiate new AO
 
                 ##initate AO
                 mie_identifier = 'https://identifiers.org/aop.events/' + str(mie_ke['event_id'])
@@ -374,15 +383,16 @@ class aop:
 
                 self.molecular_init_event.append(new_mie)
                 self.list_of_key_events.append((new_mie, new_mie.get_ke_numerical_id()))
-                #append to existing_ke list
+                # append to existing_ke list
                 existing_ke.append((new_mie, new_mie.get_ke_numerical_id()))
                 new_mie.test_print_all()
             else:
                 print('retrieve AOP')
-                #retrieved_ke is not None, but is a Key event object (don't initiate new key event)
-                #append retrieved_ke to list
+                # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
+                # append retrieved_ke to list
                 self.adverse_outcome.append(retrive_ke)
-                self.list_of_key_events.append((existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
+                self.list_of_key_events.append(
+                    (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
 
         print(tmp_ke_list)
         for ke in tmp_ke_list:
@@ -425,12 +435,13 @@ class aop:
             print(index_ke_upstream)
             print(index_ke_downstream)
             if index_ke_upstream != None:
-                #current KE. If index_ke_downstream != none. add the KE object as downstream ke pointer for current KE
+                # current KE. If index_ke_downstream != none. add the KE object as downstream ke pointer for current KE
                 if index_ke_downstream != None:
-                    self.list_of_key_events[index_ke_upstream][0].add_downstream(self.list_of_key_events[index_ke_downstream][0])
+                    self.list_of_key_events[index_ke_upstream][0].add_downstream(
+                        self.list_of_key_events[index_ke_downstream][0])
                     # do the reverse for downstream KE object, add upstream pointer to the current KE
-                    self.list_of_key_events[index_ke_downstream][0].add_upstream(self.list_of_key_events[index_ke_upstream][0])
-
+                    self.list_of_key_events[index_ke_downstream][0].add_upstream(
+                        self.list_of_key_events[index_ke_upstream][0])
 
     # return all mie
     def get_mie(self):

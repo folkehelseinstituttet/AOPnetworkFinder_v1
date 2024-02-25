@@ -2,6 +2,7 @@ from app import app
 from flask import render_template, request, jsonify, send_file
 import app.service.aop_visualizer_service as visualizer_sv
 import app.service.aop_wiki_data_extraction_service as data_extraction_sv
+import app.service.ke_degree_reader_service as ke_reader
 import logging
 ##import pandas as pd
 from io import BytesIO
@@ -36,17 +37,49 @@ def search_aops():
     filter_endorsed_chx = request.form.get('checkboxEndorsed')
     filter_review_chx = request.form.get('checkboxReview')
     filter_approved_chx = request.form.get('checkboxApproved')
+    ke_degree = request.form.get("keDegree")
 
     logging.debug(f"aop_query from the search field in front-end {aop_query}")
     print('Test aopQuery: {}'.format(aop_query))
     print('Test gene_checkbox: {}'.format(gene_checkbox))
     print('ke_query: {}'.format(ke_query))
+    print('ke_degree: {}'.format(ke_degree))
 
     # handle if there is no data
     if aop_query is None and ke_query in None and stressor_query is None:
         return render_template('visualizer_page_one.html', data=None)
 
-    aop_list = visualizer_sv.extract_all_aops_given_ke_ids(ke_query)
+    unique_ke_set = set()
+    tmp_ke_id_set = set()
+    aop_list = []
+    if (ke_degree == '1' or ke_degree == '2') and ke_query != '':
+        #ke_degree is either 1 or 2
+        list_of_ke_ids = ke_query.split(',')
+        unique_ke_set = ke_reader.read_ke_degree(ke_degree, list_of_ke_ids)
+        if len(unique_ke_set) > 0:
+            for ke_obj in unique_ke_set:
+                tmp_ke_id_set.add(ke_obj.get_ke_numerical_id())
+        tmp_ke_id_list = list(tmp_ke_id_set)
+        mie_json_ke = ke_reader.mie_json_sparql(tmp_ke_id_list)
+        ao_json_ke = ke_reader.ao_json_sparql(tmp_ke_id_list)
+        mie_set = ke_reader.mie_reader_json(mie_json_ke)
+        ao_set = ke_reader.ao_reader_json(ao_json_ke)
+        for ke_obj in unique_ke_set:
+            for mie_id in mie_set:
+                if ke_obj.get_identifier() == mie_id:
+                    ke_obj.set_mie()
+                    break
+            for ao_id in ao_set:
+                if ke_obj.get_identifier() == ao_id:
+                    ke_obj.set_ao()
+                    break
+            if ke_obj.print_ke_type() == 'None, need to declare type of key event':
+                '''Ke type is KE'''
+                ke_obj.set_ke()
+    else:
+        aop_list = visualizer_sv.extract_all_aops_given_ke_ids(ke_query)
+
+
     aop_query_list = aop_query.split(',')
     aop_stressor_list = visualizer_sv.extract_all_aop_id_from_given_stressor_name(stressor_query)
     aop_list.extend(aop_query_list)
@@ -55,8 +88,14 @@ def search_aops():
     aop_list_filtered = [aop for aop in aop_list if aop != '']
     print(aop_list_filtered)
 
-    aop_cytoscape, aop_after_filter = visualizer_sv.visualize_aop_user_input(aop_list_filtered, gene_checkbox, filter_development_chx,
-                                                           filter_endorsed_chx, filter_review_chx, filter_approved_chx)
+    if len(aop_list_filtered) == 0 and len(unique_ke_set) > 0:
+        aop_cytoscape, aop_after_filter = visualizer_sv.visualize_only_ke_degrees(unique_ke_set)
+    else:
+        aop_cytoscape, aop_after_filter = visualizer_sv.visualize_aop_user_input(aop_list_filtered, gene_checkbox,
+                                                                                 filter_development_chx,
+                                                                                 filter_endorsed_chx, filter_review_chx,
+                                                                                 filter_approved_chx, unique_ke_set)
+
     if aop_cytoscape is None:
         # Happens if all the aops the user inputted gets filtered out.
         return render_template('visualizer_page_one.html', data=None)

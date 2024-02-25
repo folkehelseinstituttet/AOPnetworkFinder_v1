@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var searchValueKe = document.getElementById("searchFieldKE").value;
         var searchValueStressor = document.getElementById("stressorDropdown").value;
         var genesChecked = document.getElementById("checkedBoxGene").checked;
+        var keDegreeSelection = document.querySelector('input[name="degree"]:checked').value;
 
         // Add the filter checkboxes to formData
         document.querySelectorAll('#checkbox-filter input[type="checkbox"]').forEach(function(checkbox) {
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         formData.append("checkboxGene", genesChecked ? "1" : "0");
+        formData.append("keDegree", keDegreeSelection);
 
         if (searchValueAop || searchValueKe || searchValueStressor) {
 
@@ -429,4 +431,12 @@ function saveLogToFile() {
     //Clear the log array after downloading the file.
     globalUserActionsLog = [];
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('input[name="options"]').forEach((radio) => {
+    radio.addEventListener('change', function() {
+      alert(`Option ${this.value} selected.`);
+    });
+  });
+});
 

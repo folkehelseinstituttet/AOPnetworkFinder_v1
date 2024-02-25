@@ -12,11 +12,18 @@ import textdistance
 
 
 def visualize_aop_user_input(aop_ids, checkbox_gene, under_development_chx, endorsed_chx, under_review_chx,
-                             approved_chx):
-
+                             approved_chx, existing_ke_objects):
     list_of_aop_objects = []
+    list_of_ke_objects = []
+    list_ke_objects = list(existing_ke_objects)
+    #list_of_ke_objects = []
+    if len(list_ke_objects) > 0:
+        for ke_object in list_ke_objects:
+            ke_id = str(ke_object.get_ke_numerical_id())
+            list_of_ke_objects.append((ke_object, ke_id))
 
-    genesCheckedFlag = checkbox_gene == '1'  # Will be false if its not 1
+
+    genesCheckedFlag = checkbox_gene == '1'  # Will be false if it's not 1
     under_development_flag = under_development_chx == '1'
     endorsed_flag = endorsed_chx == '1'
     under_review_flag = under_review_chx == '1'
@@ -40,19 +47,44 @@ def visualize_aop_user_input(aop_ids, checkbox_gene, under_development_chx, endo
         aop_rdf_data = sq.aop_dump(next(iter(set_of_unique_aops)))
         print(aop_rdf_data)
         if len(aop_rdf_data['results']['bindings']) != 0:
-            tmp_aop = aop.aop(aop_rdf_data, [], False)
+            tmp_aop = aop.aop(aop_rdf_data, list_of_ke_objects, False)
             list_of_aop_objects.append(tmp_aop)
 
-            aop_networkx_graph = plot_aop.plot(list_of_aop_objects, [])
+            aop_networkx_graph = plot_aop.plot(list_of_aop_objects, list_of_ke_objects)
 
             relabeled_graph = plot_aop.ke_obj_to_str(aop_networkx_graph, genesCheckedFlag)
 
             # can convert the networkx graph to a valid Cytoscape graph. Which is used to display the graph to the user in the front-end
             aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
+            print('one aop, unique_ke: {}'.format(list_ke_objects))
+            print('one aop, original: {}'.format(list_of_ke_objects))
             return aop_cytoscape, list(set_of_unique_aops)
     elif len(set_of_unique_aops) >= 1:
 
-        return visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag), list(set_of_unique_aops)
+        return visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag, list_of_ke_objects), list(set_of_unique_aops)
+
+    return None, []
+
+def visualize_only_ke_degrees(existing_ke_objects):
+    list_of_aop_objects = []
+    list_of_ke_objects = []
+    list_ke_objects = list(existing_ke_objects)
+    #list_of_ke_objects = []
+    if len(list_ke_objects) > 0:
+        for ke_object in list_ke_objects:
+            ke_id = str(ke_object.get_ke_numerical_id())
+            list_of_ke_objects.append((ke_object, ke_id))
+
+    # One AOP
+    if len(existing_ke_objects) > 0:
+        aop_networkx_graph = plot_aop.plot(list_of_aop_objects, list_of_ke_objects)
+        relabeled_graph = plot_aop.ke_obj_to_str(aop_networkx_graph, False)
+
+        # can convert the networkx graph to a valid Cytoscape graph. Which is used to display the graph to the user in the front-end
+        aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
+        print('one aop, unique_ke: {}'.format(list_ke_objects))
+        print('one aop, original: {}'.format(list_of_ke_objects))
+        return aop_cytoscape, []
 
     return None, []
 
@@ -114,10 +146,12 @@ def visualize_multiple_aops(set_of_unique_aops, genesCheckedFlag):
     return aop_cytoscape
 
 
-def visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag):
+def visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag, existing_ke_objects):
     aop_rdf_data = sq.multiple_aop_dump(set_of_unique_aops)
     list_of_aop_objects = []
     list_of_unique_ke = []
+    if len(existing_ke_objects) > 0:
+        list_of_unique_ke = existing_ke_objects
     # Initialize a dictionary to group entries by AOP identifier
     grouped_by_aop = defaultdict(
         lambda: {"head": aop_rdf_data["head"], "results": {"distinct": False, "ordered": True, "bindings": []}})
@@ -142,6 +176,9 @@ def visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag):
     print('group_by_aop:')
     for aop_inside in grouped_by_aop:
         print(aop_inside)
+
+    print('unique_ke_original {}'.format(list_of_unique_ke))
+    print('ke_obect_from_parameter {}'.format(existing_ke_objects))
 
     return aop_cytoscape
 

@@ -5,8 +5,11 @@ import networkx as nx
 
 def plot(aop_list, unique_key_events):
     # if aop_list is empty, return and do nothing
-    if len(aop_list) == 0:
+    if len(aop_list) == 0 and len(unique_key_events) == 0:
         return
+    elif len(aop_list) == 0 and len(unique_key_events) > 0:
+        aop_list.append('Dummy_AOP')
+
 
     # graph that visualise aop KE such as Mie, AO and regular KE
     aop_graph = nx.DiGraph()
@@ -15,22 +18,22 @@ def plot(aop_list, unique_key_events):
     # if aop_list contains 1 or more aops. if more than 1 draw multiple aops
     if len(aop_list) > 0:
         ke_list = []
-        if len(aop_list) == 1:
+        #if len(aop_list) == 1:
             # plot 1 aop
-            print('plot 1 aop')
+        #    print('plot 1 aop')
             # extract KE from the AOP object (KE = nodes in our graph)
-            if aop_list[0] == 10:
-                '''Hard coding for plotting KE Degree - Bad Implementation, (fix later)'''
-                ke_obj_tuple = set()
-                for ke_obj in unique_key_events:
-                    ke_obj_tuple.add((ke_obj, ke_obj.get_ke_numerical_id))
-                ke_list = ke_obj_tuple
-            else:
-                ke_list = aop_list[0].get_all_key_events()
-        else:
+        #    if aop_list[0] == 10:
+        #        '''Hard coding for plotting KE Degree - Bad Implementation, (fix later)'''
+        #        ke_obj_tuple = set()
+        #        for ke_obj in unique_key_events:
+        #            ke_obj_tuple.add((ke_obj, ke_obj.get_ke_numerical_id))
+        #        ke_list = ke_obj_tuple
+        #    else:
+        #        ke_list = aop_list[0].get_all_key_events()
+        #else:
             # mplot multiple_aop
-            for x in unique_key_events:
-                ke_list.append(x)
+        for x in unique_key_events:
+            ke_list.append(x)
 
         print('inside plot:')
         for ke, id in ke_list:
