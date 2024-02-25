@@ -93,7 +93,9 @@ function render_graph(url_string, formData) {
                     selector: 'node[ke_type="genes"]',
                     style: {
                         'label': 'data(id)',
-                        'background-color': '#0000FF'  // Blue for 'genes'
+                        'background-color': '#0000FF',  // Blue for 'genes'
+                        'width': 10,
+                        'height': 10
                     }
                 },
                 {
@@ -287,6 +289,7 @@ function generateGraphML(cy) {
     graphml += '<key id="label" for="node" attr.name="label" attr.type="string"/>\n';
     graphml += '<key id="value" for="node" attr.name="value" attr.type="string"/>\n';
     graphml += '<key id="name" for="node" attr.name="name" attr.type="string"/>\n';
+    graphml += '<key id="keInAop" for="node" attr.name="ke_in_aop" attr.type="string"/>\n';
     graphml += '<graph id="G" edgedefault="undirected">\n';
 
     // Add nodes with attributes
@@ -297,6 +300,9 @@ function generateGraphML(cy) {
         graphml += `<data key="label">${data.label}</data>\n`;
         graphml += `<data key="value">${data.value}</data>\n`;
         graphml += `<data key="name">${data.name}</data>\n`;
+
+        const keInAopString = JSON.stringify(data.ke_in_aop || []);
+        graphml += `<data key="keInAop">${keInAopString}</data>\n`;
         graphml += '</node>\n';
     });
 
@@ -432,11 +438,20 @@ function saveLogToFile() {
     globalUserActionsLog = [];
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('input[name="options"]').forEach((radio) => {
-    radio.addEventListener('change', function() {
-      alert(`Option ${this.value} selected.`);
-    });
-  });
-});
+// Function to toggle labels
+function toggleGeneLabels(showLabels) {
+    if (showLabels) {
+        // Show labels for genes
+        cy.style().selector('node[ke_type="genes"]').style('label', 'data(id)').update();
+    } else {
+        // Hide labels for genes
+        cy.style().selector('node[ke_type="genes"]').style('label', '').update();
+    }
+}
 
+// Handle checkbox change event
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('toggleLabels').addEventListener('change', function(e) {
+        toggleGeneLabels(this.checked);
+    });
+});

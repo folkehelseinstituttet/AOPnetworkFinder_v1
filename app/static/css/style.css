@@ -32,9 +32,16 @@ body {
 
 /* Styles for the left-side container */
 .leftside-container {
-    /*background-color: blue;*/
+    display: flex;
+    flex-direction: column; /* Align children vertically */
+    align-items: center; /* Center align the children horizontally */
     width: 25%;
     min-height: 42vw;
+}
+
+.checkbox-group label {
+    display: block;
+    margin-bottom: 8px;
 }
 
 /* Styles for the right-side container */
@@ -49,10 +56,20 @@ body {
 /* Styles for the bottom container */
 .bottom-container {
     display: grid;
-    grid-template-columns: 16.5% 58.3% 12.6% 12.6%; /* horizontal grid template 4 columns*/
+    grid-template-columns: 70% 15% 15%; /* horizontal grid template 4 columns*/
     gap: 5%
     align-items: center;
-    min-height: 5vh;
+    min-height: 3vh;
+    padding-left: 16.5%;
+}
+
+.bottom-container button {
+    height: 2.5em;
+    padding: 0.5em 1em;
+    font-size: 1em; /* Adjust based on design needs */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Styles for the top container */

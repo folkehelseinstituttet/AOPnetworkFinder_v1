@@ -22,6 +22,11 @@
         <div class="leftside-container">
             <!--button for searching -->
             <button type="submit" id="searchButtonAOP" class="search-button">Search AOP</button>
+
+            <div class="checkbox-group" id="checkboxGene">
+                <label><input type="checkbox" id="toggleLabels" name="toggleGeneName"> Toggle Gene Name</label>
+                <label><input id="checkedBoxGene" type="checkbox" name="checkboxGenes"> Show Genes</label>
+            </div>
         </div>
 
                 <!-- Centered Div for Cytoscape graph -->
@@ -80,14 +85,10 @@
     </div>
 
     <div class="bottom-container">
-
-        <div class="checkbox-group" id="checkboxGene">
-            <label><input id="checkedBoxGene" type="checkbox" name="checkboxGenes"> Show Genes</label>
-        </div>
         <!--button for exporting to Cytoscape-->
         <button id="exportToCytoscape" class="search-button-cytoscape">Export to Cytoscape</button>
         <!--button for saving user Actions -->
-        <button id="saveButtonLog" class="search-button">Save Log File</button>
+        <button id="saveButtonLog" class="search-button">Save Log</button>
         <!--Merge Key Event Nodes -->
         <button id="mergeButtonKeyEvent" class="search-button" type="button" onclick="console.log('Button clicked')">Merge KE:</button>
     </div>
