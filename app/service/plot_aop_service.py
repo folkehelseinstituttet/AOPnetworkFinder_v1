@@ -10,7 +10,6 @@ def plot(aop_list, unique_key_events):
     elif len(aop_list) == 0 and len(unique_key_events) > 0:
         aop_list.append('Dummy_AOP')
 
-
     # graph that visualise aop KE such as Mie, AO and regular KE
     aop_graph = nx.DiGraph()
     ####aop_graph = nx.MultiDiGraph()
@@ -18,10 +17,10 @@ def plot(aop_list, unique_key_events):
     # if aop_list contains 1 or more aops. if more than 1 draw multiple aops
     if len(aop_list) > 0:
         ke_list = []
-        #if len(aop_list) == 1:
-            # plot 1 aop
+        # if len(aop_list) == 1:
+        # plot 1 aop
         #    print('plot 1 aop')
-            # extract KE from the AOP object (KE = nodes in our graph)
+        # extract KE from the AOP object (KE = nodes in our graph)
         #    if aop_list[0] == 10:
         #        '''Hard coding for plotting KE Degree - Bad Implementation, (fix later)'''
         #        ke_obj_tuple = set()
@@ -30,8 +29,8 @@ def plot(aop_list, unique_key_events):
         #        ke_list = ke_obj_tuple
         #    else:
         #        ke_list = aop_list[0].get_all_key_events()
-        #else:
-            # mplot multiple_aop
+        # else:
+        # mplot multiple_aop
         for x in unique_key_events:
             ke_list.append(x)
 
@@ -41,9 +40,10 @@ def plot(aop_list, unique_key_events):
             # add ke graph node to aop_graph
             if aop_graph.has_node(ke) == False:
                 # add node to graph
-                aop_graph.add_node(ke, label=ke.get_label(), ke_type=ke.print_ke_type())
-                print('1 - label: {}, type: {}'.format(ke.get_label(),
-                                                       ke.print_ke_type()))  # Remove later, used for debugging
+                aop_graph.add_node(ke, label=ke.get_label(), ke_type=ke.print_ke_type(), ke_in_aop=ke.get_aop())
+                print('1 - label: {}, type: {}, ke in aop: {}'.format(ke.get_label(),
+                                                                      ke.print_ke_type(),
+                                                                      ke.get_aop()))  # Remove later, used for debugging
                 # add genes to graph
                 gene_plotter_helper(ke, aop_graph)
             # upstream node
@@ -59,9 +59,9 @@ def plot(aop_list, unique_key_events):
                                 node_in_graph = True
                     # if node_in_graph = False, add new node to aop_graph
                     if node_in_graph == False:
-                        aop_graph.add_node(ke_up, label=ke_up.get_label(), ke_type=ke_up.print_ke_type())
-                        print('2 - label: {}, type: {}'.format(ke.get_label(),
-                                                               ke.print_ke_type()))  # Remove later, used for debugging
+                        aop_graph.add_node(ke_up, label=ke_up.get_label(), ke_type=ke_up.print_ke_type(), ke_in_aop=ke_up.get_aop())
+                        print('2 - label: {}, type: {} ke in aop: {}'.format(ke_up.get_label(),
+                                                               ke_up.print_ke_type(), ke_up.get_aop()))  # Remove later, used for debugging
                         # add edge from current node to ke_up
                         aop_graph.add_edge(ke_up, ke)
                         # add genes to graph
@@ -84,9 +84,9 @@ def plot(aop_list, unique_key_events):
                                 node_in_graph = True
                     # if node_in_graph = False, add new node to aop_graph
                     if node_in_graph == False:
-                        aop_graph.add_node(ke_dwn, label=ke_dwn.get_label(), ke_type=ke_dwn.print_ke_type())
-                        print('3 - label: {}, type: {}'.format(ke.get_label(),
-                                                               ke.print_ke_type()))  # Remove later, used for debugging
+                        aop_graph.add_node(ke_dwn, label=ke_dwn.get_label(), ke_type=ke_dwn.print_ke_type(), ke_in_aop=ke_dwn.get_aop())
+                        print('3 - label: {}, type: {} ke in aop: {}'.format(ke.get_label(),
+                                                               ke.print_ke_type(), ke_dwn.get_aop()))  # Remove later, used for debugging
                         # add edge from current node to ke_up
                         aop_graph.add_edge(ke, ke_dwn)
                         # add genes to graph
@@ -107,11 +107,13 @@ def plot(aop_list, unique_key_events):
 
 
 '''Helper function for plotting genes'''
+
+
 def gene_plotter_helper(ke_node, aop_graph):
     if ke_node.get_nr_genes() > 0:
-        #print('genes_nr', ke_node.get_list_of_genes())
+        # print('genes_nr', ke_node.get_list_of_genes())
         for genes in ke_node.get_list_of_genes():
-            #print(genes)
+            # print(genes)
             aop_graph.add_node(genes, ke_type='genes')
             aop_graph.add_edge(genes, ke_node)
 

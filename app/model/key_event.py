@@ -20,6 +20,7 @@ class key_event:
         self.mie = False
         self.ao = False
         self.ke = False
+        self.list_of_aop_ids = set()
 
         # extract numerical id from self.identifier (only if the ke is from AOPWiki)
         if from_aopwiki == True:
@@ -147,3 +148,9 @@ class key_event:
             return 'MIE'
 
         return 'KE'
+
+    def set_aop(self, aop_id):
+        self.list_of_aop_ids.add(aop_id)
+
+    def get_aop(self):
+        return list(self.list_of_aop_ids)

@@ -89,6 +89,7 @@ class aop:
                     ao_title = x['name']['value']
                     new_ao = key_event(ao_identifier, ao_label, ao_title, True)
                     new_ao.set_ao()
+                    new_ao.set_aop(self.aop_identifier[0])
 
                     self.adverse_outcome.append(new_ao)
                     self.list_of_key_events.append((new_ao, new_ao.get_ke_numerical_id()))
@@ -99,6 +100,7 @@ class aop:
                     print('retrieve AOP')
                     # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                     # append retrieved_ke to list
+                    existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
                     self.adverse_outcome.append(retrive_ke)
                     self.list_of_key_events.append(
                         (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
@@ -120,6 +122,7 @@ class aop:
                         # key_event object
                         new_mie = key_event(mie_identifier, mie_label, mie_title, True)
                         new_mie.set_mie()
+                        new_mie.set_aop(self.aop_identifier[0])
 
                         # check if x['ke_genes']['value'] column exist, if not do nothing.
                         try:
@@ -138,6 +141,7 @@ class aop:
                         print('retrive MIE')
                         # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                         # append retrieved_ke to list
+                        existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
                         self.molecular_init_event.append(retrive_ke)
                         self.list_of_key_events.append(
                             (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
@@ -154,6 +158,7 @@ class aop:
                         # key_event object
                         new_ke = key_event(ke_identifier, ke_label, ke_title, True)
                         new_ke.set_ke()
+                        new_ke.set_aop(self.aop_identifier[0])
 
                         # check if x['ke_genes']['value'] column exist, if not do nothing.
                         try:
@@ -170,6 +175,7 @@ class aop:
                         print('Retrieve KE')
                         # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                         # append retrieved_ke to list
+                        existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
                         self.list_of_key_events.append(
                             (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
 
@@ -205,6 +211,7 @@ class aop:
                         # key_event object
                         new_mie = key_event(mie_identifier, mie_label, mie_title, True)
                         new_mie.set_mie()
+                        new_mie.set_aop(self.aop_identifier[0])
 
                         # check if x['ke_genes']['value'] column exist, if not do nothing.
                         try:
@@ -222,6 +229,7 @@ class aop:
                     else:
                         # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                         # append retrieved_ke to list
+                        existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
                         self.molecular_init_event.append(retrive_ke)
                         self.list_of_key_events.append(
                             (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
@@ -238,6 +246,7 @@ class aop:
                         # key_event object
                         new_ke = key_event(ke_identifier, ke_label, ke_title, True)
                         new_ke.set_ke()
+                        new_ke.set_aop(self.aop_identifier[0])
 
                         # check if x['ke_genes']['value'] column exist, if not do nothing.
                         try:
@@ -253,6 +262,7 @@ class aop:
                     else:
                         # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                         # append retrieved_ke to list
+                        existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
                         self.list_of_key_events.append(
                             (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
 
