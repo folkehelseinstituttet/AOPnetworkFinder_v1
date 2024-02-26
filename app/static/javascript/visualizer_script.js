@@ -58,7 +58,11 @@ function render_graph(url_string, formData) {
         globalMergeJson = cyData['merge_options:'];
         console.log(globalMergeJson);
 
+        const destinationDropdown = document.getElementById('keepNodeDropDown');
+        const sourceDropdown = document.getElementById('loseNodeDropDown');
+
         loggingAopVisualized(cyData['aop_before_filter'], cyData['aop_after_filter']);
+        populateMergeOptionsDropDown(destinationDropdown, sourceDropdown, globalGraphJson);
 
         cy = cytoscape({
             container: document.getElementById('cy'),
@@ -176,9 +180,20 @@ function mergeNodes(keepNodeId, loseNodeId) {
         }
     });
 
-    // Remove the loseNode
+    // Remove the loseNode and update dropdown
     loseNode.remove();
     removeButtonPairs(keepNodeId, loseNodeId);
+    //update globaljsonmerge
+    console.log("merge options {}",globalMergeJson);
+    globalMergeJson = globalMergeJson.filter(([source, target]) => source !== loseNodeId && target !== loseNodeId);
+
+    globalGraphJson.nodes = globalGraphJson.nodes.filter(node => node.data.name !== loseNodeId);
+
+    const destinationDropdown = document.getElementById('keepNodeDropDown');
+    const sourceDropdown = document.getElementById('loseNodeDropDown');
+    populateMergeOptionsDropDown(destinationDropdown,sourceDropdown,globalGraphJson);
+    //regenerate the updated buttons
+    createMergeButtons(globalMergeJson);
 }
 
 function createMergeButtons(mergeOptions) {
@@ -219,8 +234,50 @@ function createMergeButtons(mergeOptions) {
   });
 }
 
+function populateMergeOptionsDropDown(dropDownKeep, dropDownLose, graphJson) {
+
+    dropDownKeep.innerHTML = '';
+    dropDownLose.innerHTML = '';
+
+    const nodes = graphJson.nodes;
+
+    nodes.forEach(nodeItem => {
+        const nodeName = nodeItem.data.name;
+        const option = document.createElement('option');
+        option.value = nodeName;
+        option.textContent = nodeName;
+
+        const nodeNameTwo = nodeItem.data.name;
+        const optionTwo = document.createElement('option');
+        optionTwo.value = nodeNameTwo;
+        optionTwo.textContent = nodeNameTwo;
+
+        dropDownKeep.appendChild(option); // Appending the new option to the dropdown
+        dropDownLose.appendChild(optionTwo);
+    });
+
+    $(dropDownKeep).select2({ placeholder: "Select a node to keep" });
+    $(dropDownLose).select2({ placeholder: "Select a node to merge" });
+
+    $(dropDownKeep).val(null).trigger('change');
+    $(dropDownLose).val(null).trigger('change');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('processButton').addEventListener('click', function() {
+        //Manuel merge process
+        var keepNodeDropDown = document.getElementById("keepNodeDropDown").value;
+        var loseNodeDropDown = document.getElementById("loseNodeDropDown").value;
+
+        //if they are equal or if one of the options are empty, skip manuel merge
+        if (keepNodeDropDown === '' || loseNodeDropDown === '' || keepNodeDropDown === loseNodeDropDown) {
+            console.log('Either one of the options is empty or both options are equal. Skipping manual merge.');
+        } else {
+        // manuel merge
+             mergeNodes(keepNodeDropDown, loseNodeDropDown)
+        }
+
+        //Button merge process
         const mergePairs = document.querySelectorAll('.merge-option-group');
         console.log('merge pairs:', mergePairs);
 
@@ -240,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
+            //button merge
             if (keepNodeId && loseNodeId) {
                 console.log(`Merging: Keep ${keepNodeId}, Lose ${loseNodeId}`);
                 mergeNodes(keepNodeId, loseNodeId); // Perform the merge logic
@@ -261,6 +319,14 @@ function removeButtonPairs(keepNodeId, loseNodeId) {
                 button.parentNode.remove();
             }
         });
+}
+
+function removeButtonPairsManuelMerge(loseNodeId) {
+    document.querySelectorAll(`button[data-node-id="${loseNodeId}"]`).forEach(button => {
+        if (button.parentNode && button.parentNode.classList.contains('merge-option-group')) {
+            button.parentNode.remove();
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
