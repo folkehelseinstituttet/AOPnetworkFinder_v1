@@ -60,9 +60,11 @@ function render_graph(url_string, formData) {
 
         const destinationDropdown = document.getElementById('keepNodeDropDown');
         const sourceDropdown = document.getElementById('loseNodeDropDown');
+        const aopDropDown = document.getElementById('aopDropDown')
 
         loggingAopVisualized(cyData['aop_before_filter'], cyData['aop_after_filter']);
         populateMergeOptionsDropDown(destinationDropdown, sourceDropdown, globalGraphJson);
+        populateHighlightAopDropDown(aopDropDown, cyData['aop_after_filter']);
 
         cy = cytoscape({
             container: document.getElementById('cy'),
@@ -112,12 +114,32 @@ function render_graph(url_string, formData) {
                         'curve-style': 'bezier',
                         'target-arrow-scale': 1.5
                     }
+                },
+                {
+                    selector: 'node.highlighted',
+                    style: {
+                        'background-opacity': 1,
+                        'border-color': 'black',
+                        'border-width': 2,
+                        'border-opacity': 1,
+                        'text-opacity': 1 // labels are visible for highlighted nodes
+                    }
+                },
+                {
+                    selector: 'node.non-highlighted',
+                    style: {
+                        'background-opacity': 0.1,
+                        'text-opacity': 0, // Hide label text
+                        'border-opacity': 0
+                    }
                 }
             ],
             layout: {
                 name: 'grid',
             }
         });
+        // Inside render_graph, after cy initialization
+        setupEdgeAddition(cy);
     })
     .catch(error => console.error('Error:', error));
 }
@@ -147,6 +169,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+function highlightNodesById(idToHighlight) {
+    // First, mark all nodes as non-highlighted
+    cy.nodes().forEach(node => {
+        node.addClass('non-highlighted');
+    });
+
+    // Then, find and highlight the matching nodes
+    cy.nodes().filter(node => {
+        // Assuming each node has an array of IDs in 'relatedIds'
+        return node.data('relatedIds') && node.data('relatedIds').includes(idToHighlight);
+    }).forEach(node => {
+        node.removeClass('non-highlighted').addClass('highlighted');
+    });
+}
 
 //Logic for merging nodes
 function mergeNodes(keepNodeId, loseNodeId) {
@@ -261,6 +298,25 @@ function populateMergeOptionsDropDown(dropDownKeep, dropDownLose, graphJson) {
 
     $(dropDownKeep).val(null).trigger('change');
     $(dropDownLose).val(null).trigger('change');
+}
+
+function populateHighlightAopDropDown(dropDownAop, graphJson) {
+
+    const aopAfterFilter = graphJson;
+    console.log(aopAfterFilter);
+    dropDownAop.innerHTML = '';
+
+    aopAfterFilter.forEach(aopItem => {
+        const option = document.createElement('option');
+        option.value = aopItem;
+        option.textContent = `AOP ${aopItem}`;
+
+        dropDownAop.appendChild(option);
+    });
+
+    $(dropDownAop).select2({ placeholder: "Select an AOP to highlight" });
+
+    $(dropDownAop).val(null).trigger('change');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -520,4 +576,69 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('toggleLabels').addEventListener('change', function(e) {
         toggleGeneLabels(this.checked);
     });
+});
+
+function highlightGraphForAop(aopId) {
+
+    cy.elements().removeClass('highlighted').addClass('non-highlighted');
+    if (selectedAop && selectedAop !== "none") {
+        cy.elements().filter(function(ele) {
+            return ele.data('ke_in_aop') && ele.data('ke_in_aop').includes(aopId);
+        }).removeClass('non-highlighted').addClass('highlighted');
+    } else {
+        cy.elements().removeClass('non-highlighted');
+    }
+}
+
+$(document).ready(function() {
+    $('#aopDropDown').select2({
+        placeholder: "Select an AOP to highlight",
+        allowClear: true
+    });
+
+    $('#aopDropDown').on('select2:select', function(e) {
+        var selectedAop = $(this).val();
+        console.log("Selected AOP", selectedAop);
+        highlightGraphForAop(selectedAop);
+    });
+
+    $('#aopDropDown').on('select2:unselect', function(e) {
+        highlightGraphForAop(null);
+    });
+});
+
+function setupEdgeAddition(cy) {
+    let firstNodeId = null; // to keep track of the first node clicked
+    let shiftKeyDown = false; // to track whether the Shift key is held down
+
+    document.addEventListener('keydown', function(event) {
+      if(event.key === 'Shift') {
+        shiftKeyDown = true;
+      }
+    });
+
+    document.addEventListener('keyup', function(event) {
+      if(event.key === 'Shift') {
+        shiftKeyDown = false;
+      }
+    });
+
+    cy.on('tap', 'node', function(evt){
+      if(shiftKeyDown) {
+        let nodeId = evt.target.id();
+        if(firstNodeId === null) {
+          firstNodeId = nodeId;
+        } else {
+          cy.add([
+            { group: "edges", data: { source: firstNodeId, target: nodeId } }
+          ]);
+          firstNodeId = null; // Reset for next edge addition
+        }
+      }
+    });
+}
+
+
+document.addEventListener('click', function(event) {
+    console.log(event.target); // See which element was clicked
 });
