@@ -112,7 +112,8 @@ function render_graph(url_string, formData) {
                         'target-arrow-color': '#7A7A7A',
                         'target-arrow-shape': 'triangle',
                         'curve-style': 'bezier',
-                        'target-arrow-scale': 1.5
+                        'target-arrow-scale': 1.5,
+                        'opacity': 1
                     }
                 },
                 {
@@ -135,8 +136,38 @@ function render_graph(url_string, formData) {
                 }
             ],
             layout: {
-                name: 'grid',
+                    name: 'cose',
+                    idealEdgeLength: 100,
+                    nodeRepulsion: function( node ){ return 400000; },
+                    animate: true,
+                    animationDuration: 1000,
+                    animationEasing: undefined,
+                    fit: true,
+                    padding: 30,
+                    randomize: false,
+                    componentSpacing: 100,
+                    nodeOverlap: 50,
+                    nestingFactor: 5,
+                    gravity: 80,
+                    numIter: 1000,
+                    initialTemp: 200,
+                    coolingFactor: 0.95,
+                    minTemp: 1.0
             }
+        });
+        //edges between genes set to opacity 50%
+        cy.ready(function() {
+            // Iterate over all edges
+            cy.edges().forEach(function(edge) {
+                // Check if either the source or target node has 'ke_type' equal to 'genes'
+                var sourceNode = edge.source();
+                var targetNode = edge.target();
+
+                if (sourceNode.data('ke_type') === 'genes' || targetNode.data('ke_type') === 'genes') {
+                    // Update the edge more translucent
+                    edge.style('opacity', 0.5);
+                }
+            });
         });
         // Inside render_graph, after cy initialization
         setupEdgeAddition(cy);
