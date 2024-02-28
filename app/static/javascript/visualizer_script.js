@@ -117,7 +117,7 @@ function render_graph(url_string, formData) {
                     }
                 },
                 {
-                    selector: 'node.highlighted',
+                    selector: 'node.highlighted, edge.highlighted',
                     style: {
                         'background-opacity': 1,
                         'border-color': 'black',
@@ -127,7 +127,7 @@ function render_graph(url_string, formData) {
                     }
                 },
                 {
-                    selector: 'node.non-highlighted',
+                    selector: 'node.non-highlighted, edge.non-highlighted',
                     style: {
                         'background-opacity': 0.1,
                         'text-opacity': 0, // Hide label text
@@ -610,16 +610,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function highlightGraphForAop(aopId) {
-
+    // Reset highlights for nodes and edges
     cy.elements().removeClass('highlighted').addClass('non-highlighted');
-    if (selectedAop && selectedAop !== "none") {
-        cy.elements().filter(function(ele) {
-            return ele.data('ke_in_aop') && ele.data('ke_in_aop').includes(aopId);
+
+    if (aopId && aopId !== "none") {
+        // First, highlight the relevant nodes
+        const highlightedNodes = cy.nodes().filter(function(node) {
+            const keInAop = node.data('ke_in_aop');
+            return keInAop && keInAop.includes(aopId);
         }).removeClass('non-highlighted').addClass('highlighted');
+
+        highlightedNodes.connectedEdges().removeClass('non-highlighted').addClass('highlighted');
+
+        cy.edges().not(highlightedNodes.connectedEdges()).addClass('non-highlighted');
     } else {
+        // reset
         cy.elements().removeClass('non-highlighted');
     }
 }
+
+
 
 $(document).ready(function() {
     $('#aopDropDown').select2({
