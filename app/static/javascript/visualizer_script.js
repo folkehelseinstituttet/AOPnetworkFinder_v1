@@ -77,6 +77,7 @@ function render_graph(url_string, formData) {
                 {
                     selector: 'node[ke_type="Molecular Initiating Event"]',
                     style: {
+                        'shape': 'square',
                         'label': 'data(id)',
                         'background-color': '#00ff00'  // Green for 'Key Event'
                     }
@@ -84,6 +85,7 @@ function render_graph(url_string, formData) {
                 {
                     selector: 'node[ke_type="Adverse Outcome"]',
                     style: {
+                        'shape': 'triangle',
                         'label': 'data(id)',
                         'background-color': '#ff0000'  // Red for 'Adverse Outcome'
                     }
@@ -117,7 +119,7 @@ function render_graph(url_string, formData) {
                     }
                 },
                 {
-                    selector: 'node.highlighted, edge.highlighted',
+                    selector: 'node.highlighted',
                     style: {
                         'background-opacity': 1,
                         'border-color': 'black',
@@ -127,9 +129,9 @@ function render_graph(url_string, formData) {
                     }
                 },
                 {
-                    selector: 'node.non-highlighted, edge.non-highlighted',
+                    selector: 'node.non-highlighted',
                     style: {
-                        'background-opacity': 0.1,
+                        'background-opacity': 0.3,
                         'text-opacity': 0, // Hide label text
                         'border-opacity': 0
                     }
@@ -202,19 +204,20 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function highlightNodesById(idToHighlight) {
-    // First, mark all nodes as non-highlighted
+    // Mark all nodes as non-highlighted initially
     cy.nodes().forEach(node => {
-        node.addClass('non-highlighted');
+        node.removeClass('highlighted').addClass('non-highlighted');
     });
 
     // Then, find and highlight the matching nodes
     cy.nodes().filter(node => {
-        // Assuming each node has an array of IDs in 'relatedIds'
         return node.data('relatedIds') && node.data('relatedIds').includes(idToHighlight);
     }).forEach(node => {
         node.removeClass('non-highlighted').addClass('highlighted');
     });
 }
+
+
 
 //Logic for merging nodes
 function mergeNodes(keepNodeId, loseNodeId) {
@@ -610,22 +613,27 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function highlightGraphForAop(aopId) {
-    // Reset highlights for nodes and edges
-    cy.elements().removeClass('highlighted').addClass('non-highlighted');
+    // Initially classify all nodes and edges as non-highlighted
+    cy.elements().addClass('non-highlighted').removeClass('highlighted');
 
     if (aopId && aopId !== "none") {
-        // First, highlight the relevant nodes
-        const highlightedNodes = cy.nodes().filter(function(node) {
-            const keInAop = node.data('ke_in_aop');
-            return keInAop && keInAop.includes(aopId);
-        }).removeClass('non-highlighted').addClass('highlighted');
+        const highlightedNodes = cy.nodes().filter(node => node.data('ke_in_aop') && node.data('ke_in_aop').includes(aopId));
+        highlightedNodes.removeClass('non-highlighted').addClass('highlighted');
 
-        highlightedNodes.connectedEdges().removeClass('non-highlighted').addClass('highlighted');
+        cy.edges().forEach(edge => {
+            const sourceHighlighted = edge.source().hasClass('highlighted');
+            const targetHighlighted = edge.target().hasClass('highlighted');
 
-        cy.edges().not(highlightedNodes.connectedEdges()).addClass('non-highlighted');
+            if (sourceHighlighted && targetHighlighted) {
+                edge.style('opacity', '1');
+            } else {
+                edge.style('opacity', '0.1');
+            }
+        });
     } else {
-        // reset
-        cy.elements().removeClass('non-highlighted');
+        // If no aopId is provided or "none" is selected, remove all highlighting
+        cy.elements().removeClass('highlighted non-highlighted');
+        cy.elements().style('opacity', '1');
     }
 }
 
@@ -643,7 +651,13 @@ $(document).ready(function() {
         highlightGraphForAop(selectedAop);
     });
 
-    $('#aopDropDown').on('select2:unselect', function(e) {
+    //$('#aopDropDown').on('select2:unselect', function(e) {
+    //    highlightGraphForAop(null);
+    //});
+
+    // Custom clear button functionality
+    $('#clearSelection').on('click', function() {
+        $('#aopDropDown').val(null).trigger('change');
         highlightGraphForAop(null);
     });
 });

@@ -130,7 +130,6 @@ def ke_obj_to_str(aop_graph, bool_genes):
         print(aop_graph)
         for nodes in aop_graph:
             if not isinstance(nodes, str):
-                tmp_ke_title = ''
                 if type(nodes.get_title()) is dict:
                     tmp_ke_title = nodes.get_title()['value']
                 else:
@@ -138,7 +137,7 @@ def ke_obj_to_str(aop_graph, bool_genes):
                 mapping_label[nodes] = tmp_ke_title
             else:
                 '''Genes'''
-                genes_reduced = nodes[-4:]
+                genes_reduced = nodes.split('/')[-1]
                 mapping_label[nodes] = genes_reduced
         '''Relabel nodes'''
         graph_relabeled = nx.relabel_nodes(aop_graph, mapping_label)

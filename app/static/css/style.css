@@ -1,17 +1,36 @@
 /* styles.css */
 
-body {
-    background-color: #8e8ea0; /* Gray background for the page */
+/*body {
+    background-color: #8e8ea0;
     color: #333;
-}
 
+        background: linear-gradient(to bottom, #E0F7FA 0%, #0288D1 100%);
+}*/
+
+/*body {
+    background: linear-gradient(to bottom, #E0F7FA 0%, #8e8ea0 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}*/
+
+body {
+    background-image: url('/static/images/minimalistic_background_blue_white.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 
 #main_text {
     font-size: 2vw;
 }
 
 #cy {
-    background-color: white; /* Specific background for Cytoscape container */
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: white;
     width: 100%;
     min-height: 42vw;
 }
@@ -38,6 +57,15 @@ body {
     min-height: 42vw;
 }
 
+.leftside-container .input-group {
+    margin-top: 10%;
+}
+
+.leftside-container #clearSelection {
+    margin-top: 10%;
+}
+
+
 .checkbox-group label {
     display: block;
     margin-bottom: 8px;
@@ -52,6 +80,14 @@ body {
     min-height: 42vw;
 }
 
+.leftside-container #searchButtonAOP{
+    border-radius: 10px;
+}
+
+.leftside-container #clearSelection{
+    border-radius: 10px;
+}
+
 /* Styles for the bottom container */
 .bottom-container {
     display: grid;
@@ -63,6 +99,7 @@ body {
 }
 
 .bottom-container button {
+    border-radius: 10px;
     height: 2.5em;
     padding: 0.5em 1em;
     font-size: 1em; /* Adjust based on design needs */
