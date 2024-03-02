@@ -174,7 +174,9 @@ body {
 
 #searchGroupStressor{
     margin: auto;
-    width: 67%;
+    width: 100%;
+    margin-bottom: 20%;
+    flex: 1
 }
 
 #searchFieldStressor {
@@ -193,7 +195,7 @@ body {
 }
 
 #stressorDropdown {
-    width: 74%;
+    width: 80%;
 }
 
 /*navbar - logo size and placement */
