@@ -35,7 +35,7 @@ body {
     min-height: 42vw;
 }
 
-/* Styles for the parent container that holds everything */
+
 .parent-container {
     display: flex;
     justify-content: center;
@@ -48,7 +48,7 @@ body {
     min-height: 42vw;
 }
 
-/* Styles for the left-side container */
+
 .leftside-container {
     display: flex;
     flex-direction: column;
@@ -71,11 +71,11 @@ body {
     margin-bottom: 8px;
 }
 
-/* Styles for the right-side container */
+
 .rightside-container {
     display: flex;
-    flex-direction: column; /* Align children vertically */
-    align-items: center; /* Center align the children horizontally */
+    flex-direction: column;
+    align-items: center;
     width: 40%;
     min-height: 42vw;
 }
@@ -88,10 +88,9 @@ body {
     border-radius: 10px;
 }
 
-/* Styles for the bottom container */
 .bottom-container {
     display: grid;
-    grid-template-columns: 70% 15% 15%; /* horizontal grid template 4 columns*/
+    grid-template-columns: 70% 15% 15%;
     gap: 5%
     align-items: center;
     min-height: 3vh;
@@ -102,13 +101,13 @@ body {
     border-radius: 10px;
     height: 2.5em;
     padding: 0.5em 1em;
-    font-size: 1em; /* Adjust based on design needs */
+    font-size: 1em;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Styles for the top container */
+
 .top-container {
     display: grid;
     place-items: center;
@@ -123,8 +122,8 @@ body {
 }
 
 .search-group label {
-    margin-right: 4%; /* Space between label and input */
-    white-space: nowrap; /* Prevents label from wrapping */
+    margin-right: 4%;
+    white-space: nowrap;
 }
 
 .search-field {
@@ -135,15 +134,15 @@ body {
 
 .rightside-container label[for="searchFieldKe"],
 .rightside-container #searchFieldKE {
-  align-self: stretch; /* This will make them stretch to the full width of the container */
-  width: 100%; /* Ensure they take the full width */
+  align-self: stretch;
+  width: 100%;
 }
 
 
 .rightside-container label[for="searchFieldAOP"],
 .rightside-container #searchFieldAOP {
-  align-self: stretch; /* This will make them stretch to the full width of the container */
-  width: 100%; /* Ensure they take the full width */
+  align-self: stretch;
+  width: 100%;
 }
 
 
@@ -163,18 +162,18 @@ body {
     justify-self: start;
     margin-left: 0%;
     width: 16.5%;
-    white-space: nowrap; /* Prevents label from wrapping */
+    white-space: nowrap;
 }
 
 .checkbox-group {
     width: 80%;
-    margin-top: auto; /* Pushes the group to the bottom */
+    margin-top: auto;
     margin-right: auto;
-    text-align: left; /* Align checkboxes to the left */
+    text-align: left;
 }
 
 #searchGroupStressor{
-    margin: auto; /* Pushes search field to the center*/
+    margin: auto;
     width: 67%;
 }
 
@@ -334,3 +333,6 @@ nav img {
     border-radius: 10px;
 }
 
+button:hover {
+    background-color: #0056b3;
+}
