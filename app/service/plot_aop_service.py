@@ -40,7 +40,7 @@ def plot(aop_list, unique_key_events):
             # add ke graph node to aop_graph
             if aop_graph.has_node(ke) == False:
                 # add node to graph
-                aop_graph.add_node(ke, label=ke.get_label(), ke_type=ke.print_ke_type(), ke_in_aop=ke.get_aop())
+                aop_graph.add_node(ke, label=ke.get_label(), ke_type=ke.print_ke_type(), ke_in_aop=ke.get_aop(), ke_identifier=ke.get_identifier(), ke_aop_urls=ke.get_aop_urls(), ke_url=ke.get_identifier())
                 print('1 - label: {}, type: {}, ke in aop: {}'.format(ke.get_label(),
                                                                       ke.print_ke_type(),
                                                                       ke.get_aop()))  # Remove later, used for debugging
@@ -59,7 +59,10 @@ def plot(aop_list, unique_key_events):
                                 node_in_graph = True
                     # if node_in_graph = False, add new node to aop_graph
                     if node_in_graph == False:
-                        aop_graph.add_node(ke_up, label=ke_up.get_label(), ke_type=ke_up.print_ke_type(), ke_in_aop=ke_up.get_aop())
+                        #aop_graph.add_node(ke_up, label=ke_up.get_label(), ke_type=ke_up.print_ke_type(), ke_in_aop=ke_up.get_aop())
+                        aop_graph.add_node(ke_up, label=ke_up.get_label(), ke_type=ke_up.print_ke_type(), ke_in_aop=ke_up.get_aop(),
+                                           ke_identifier=ke_up.get_identifier(),
+                                           ke_aop_urls=ke_up.get_aop_urls(), ke_url=ke_up.get_identifier())
                         print('2 - label: {}, type: {} ke in aop: {}'.format(ke_up.get_label(),
                                                                ke_up.print_ke_type(), ke_up.get_aop()))  # Remove later, used for debugging
                         # add edge from current node to ke_up
@@ -84,7 +87,10 @@ def plot(aop_list, unique_key_events):
                                 node_in_graph = True
                     # if node_in_graph = False, add new node to aop_graph
                     if node_in_graph == False:
-                        aop_graph.add_node(ke_dwn, label=ke_dwn.get_label(), ke_type=ke_dwn.print_ke_type(), ke_in_aop=ke_dwn.get_aop())
+                        #aop_graph.add_node(ke_dwn, label=ke_dwn.get_label(), ke_type=ke_dwn.print_ke_type(), ke_in_aop=ke_dwn.get_aop())
+                        aop_graph.add_node(ke_dwn, label=ke_dwn.get_label(), ke_type=ke_dwn.print_ke_type(), ke_in_aop=ke_dwn.get_aop(),
+                                           ke_identifier=ke_dwn.get_identifier(),
+                                           ke_aop_urls=ke_dwn.get_aop_urls(), ke_url=ke_dwn.get_identifier())
                         print('3 - label: {}, type: {} ke in aop: {}'.format(ke.get_label(),
                                                                ke.print_ke_type(), ke_dwn.get_aop()))  # Remove later, used for debugging
                         # add edge from current node to ke_up

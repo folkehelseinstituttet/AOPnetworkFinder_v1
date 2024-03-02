@@ -2,7 +2,12 @@
 let globalGraphJson = [];
 let globalMergeJson = [];
 let globalUserActionsLog = [];
+let allowHidePopup = false; // Flag to control the hiding of the popup
 var cy;
+
+
+let lastClickTime = 0;
+const doubleClickThreshold = 300; // Milliseconds
 
 //sending the user inputted values to the backend for processing
 document.addEventListener('DOMContentLoaded', function() {
@@ -173,6 +178,98 @@ function render_graph(url_string, formData) {
         });
         // Inside render_graph, after cy initialization
         setupEdgeAddition(cy);
+
+        cy.on('click', 'node', function(evt) {
+            const currentTime = new Date().getTime();
+            if (currentTime - lastClickTime <= doubleClickThreshold) {
+                const node = evt.target;
+                let contentHtml = `<strong>Node Data: (${node.data().ke_type})</strong><br><div><table>`;
+
+                if (node.data().ke_type === 'genes') {
+                    // For Gene nodes
+                    let connectedKEs = node.connectedEdges().map(edge => {
+                        // Check connected nodes
+                        const connectedNode = edge.source().id() === node.id() ? edge.target() : edge.source();
+                        if (connectedNode.data().ke_type !== 'genes') {
+                            // Format as clickable link
+                            let keId = connectedNode.data('ke_identifier').split('/').pop();
+                            return `<a href="${connectedNode.data('ke_identifier')}" target="_blank">${keId}</a>`;
+                        }
+                    }).filter(ke => ke !== undefined).join(', '); // Filter out undefined and join
+
+                    contentHtml += `<tr><td>Name:</td><td> ${node.data('name') || 'N/A'}</td></tr>`;
+                    contentHtml += `<tr><td>Connected KE:</td><td>${connectedKEs || 'N/A'}</td></tr>`;
+                } else {
+
+                    let upstreamKEs = [];
+                    let downstreamKEs = [];
+                    let connectedGenes = [];
+                    let ke_aop_urls = node.data('ke_aop_urls') || [];
+
+                    // Determine upstream, downstream KEs, and connected genes
+                    node.connectedEdges().forEach(edge => {
+                        const targetNode = edge.target();
+                        const sourceNode = edge.source();
+
+                        if (sourceNode.id() === node.id()) { // downstream
+                            downstreamKEs.push(targetNode.data('ke_identifier'));
+                        } else { //upstream
+                            if (sourceNode.data().ke_type === 'genes') {
+                                connectedGenes.push(sourceNode.data('name'));
+                            } else {
+                                upstreamKEs.push(sourceNode.data('ke_identifier'));
+                            }
+                        }
+                    });
+
+                    // no upstream/downstream or connected genes
+                    if (upstreamKEs.length === 0) upstreamKEs.push('N/A');
+                    if (downstreamKEs.length === 0) downstreamKEs.push('N/A');
+                    if (connectedGenes.length === 0) connectedGenes.push('N/A');
+
+                    // Generating the clickable KE in AOPs links
+                    let keAopLinksHtml = ke_aop_urls.map(url => {
+                        const match = url.match(/\/(\d+)$/);
+                        if (match) {
+                            const aopId = match[1];
+                            return `<a href="${url}" target="_blank">${aopId}</a>`; // Create clickable link
+                        }
+                        return ''; // URL does not match the expected format
+                    }).join(', '); // Join all urls
+
+                    const processKEs = (keArray) => {
+                        // Check if the array is empty or contains only 'N/A'
+                        if (keArray.length === 0 || (keArray.length === 1 && keArray[0] === 'N/A')) {
+                            return 'N/A'; // Return 'N/A' as plain text, not a link
+                        } else {
+                            return keArray.map(ke => {
+                                let keId = ke.split('/').pop();
+                                return `<a href="${ke}" target="_blank">${keId}</a>`;
+                            }).join(', ');
+                        }
+                    };
+
+                    contentHtml += `<tr><td>ID: </td><td> ${node.data('label') || 'N/A'}</td></tr>`;
+                    contentHtml += `<tr><td>Name: </td><td> ${node.data('name') || 'N/A'}</td></tr>`;
+                    const url = node.data('ke_url') ? `<a href="${node.data('ke_url')}" target="_blank">${node.data('ke_url')}</a>` : 'N/A';
+                    contentHtml += `<tr><td>KE Url: </td><td> ${url}</td></tr>`;
+                    contentHtml += `<tr><td>Downstream KE:</td><td>${processKEs(downstreamKEs) || 'N/A'}</td></tr>`;
+                    contentHtml += `<tr><td>Upstream KE:</td><td>${processKEs(upstreamKEs) || 'N/A'}</td></tr>`;
+                    contentHtml += `<tr><td>Connected Genes: </td><td> ${connectedGenes.join(', ') || 'N/A'}</td></tr>`;
+                    if (keAopLinksHtml) {
+                        contentHtml += `<tr><td>KE in AOPs:</td><td>${keAopLinksHtml}</td></tr>`;
+                    }
+                }
+                contentHtml += `</table></div>`;
+                document.getElementById('nodeInfo').innerHTML = contentHtml;
+                document.getElementById('nodePopup').style.display = 'block';
+
+                allowHidePopup = false;
+                setTimeout(() => { allowHidePopup = true; }, 50);
+            }
+            lastClickTime = currentTime;
+        });
+
     })
     .catch(error => console.error('Error:', error));
 }
@@ -693,6 +790,16 @@ function setupEdgeAddition(cy) {
     });
 }
 
+document.addEventListener('click', function(e) {
+    var popup = document.getElementById('nodePopup');
+    if (popup && popup.style.display === 'block' && !popup.contains(e.target) && allowHidePopup) {
+        popup.style.display = 'none';
+    }
+});
+
+document.getElementById('nodePopup').addEventListener('click', function(e) {
+    e.stopPropagation(); // Prevent click inside popup from propagating
+});
 
 document.addEventListener('click', function(event) {
     console.log(event.target); // See which element was clicked

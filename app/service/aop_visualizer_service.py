@@ -212,7 +212,8 @@ def find_all_ke_from_json(json_string):
     ke_from_json = set()
     print('inside find all ke: {}'.format(json_string))
     for node in json_string["elements"]["nodes"]:
-        ke_from_json.add(node["data"]["name"])
+        if node["data"]["ke_type"] != 'genes':
+            ke_from_json.add(node["data"]["name"])
 
     print("ke_from_json: {}".format(ke_from_json))
     return ke_from_json

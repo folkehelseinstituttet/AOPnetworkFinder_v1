@@ -8,6 +8,7 @@ class aop:
     def __init__(self, json_dictionary, unique_ke_list, api_flag):
         self.json_dictionary = json_dictionary
         self.aop_identifier = 0
+        self.aop_url = ''
         self.molecular_init_event = []
         self.adverse_outcome = []
         self.list_of_key_events = []  # type key_event, tuple (key_event_object, ke_numerical_id)
@@ -32,6 +33,7 @@ class aop:
                 # update identifier and break loop.
                 pattern = "\\d+$"  # pattern
                 self.aop_identifier = re.findall(pattern, x['value'])  # return a list of single AOP id
+                self.aop_url = x['value']
                 break
 
         print('inside aop class: read_json')
@@ -90,6 +92,7 @@ class aop:
                     new_ao = key_event(ao_identifier, ao_label, ao_title, True)
                     new_ao.set_ao()
                     new_ao.set_aop(self.aop_identifier[0])
+                    new_ao.add_aop_url(self.aop_url)
 
                     self.adverse_outcome.append(new_ao)
                     self.list_of_key_events.append((new_ao, new_ao.get_ke_numerical_id()))
@@ -101,6 +104,7 @@ class aop:
                     # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                     # append retrieved_ke to list
                     existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
+                    existing_ke[retrive_ke][0].add_aop_url(self.aop_url)
                     self.adverse_outcome.append(retrive_ke)
                     self.list_of_key_events.append(
                         (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
@@ -123,6 +127,7 @@ class aop:
                         new_mie = key_event(mie_identifier, mie_label, mie_title, True)
                         new_mie.set_mie()
                         new_mie.set_aop(self.aop_identifier[0])
+                        new_mie.add_aop_url(self.aop_url)
 
                         # check if x['ke_genes']['value'] column exist, if not do nothing.
                         try:
@@ -142,6 +147,7 @@ class aop:
                         # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                         # append retrieved_ke to list
                         existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
+                        existing_ke[retrive_ke][0].add_aop_url(self.aop_url)
                         self.molecular_init_event.append(retrive_ke)
                         self.list_of_key_events.append(
                             (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
@@ -159,6 +165,7 @@ class aop:
                         new_ke = key_event(ke_identifier, ke_label, ke_title, True)
                         new_ke.set_ke()
                         new_ke.set_aop(self.aop_identifier[0])
+                        new_ke.add_aop_url(self.aop_url)
 
                         # check if x['ke_genes']['value'] column exist, if not do nothing.
                         try:
@@ -176,6 +183,7 @@ class aop:
                         # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                         # append retrieved_ke to list
                         existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
+                        existing_ke[retrive_ke][0].add_aop_url(self.aop_url)
                         self.list_of_key_events.append(
                             (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
 
@@ -212,6 +220,7 @@ class aop:
                         new_mie = key_event(mie_identifier, mie_label, mie_title, True)
                         new_mie.set_mie()
                         new_mie.set_aop(self.aop_identifier[0])
+                        new_mie.add_aop_url(self.aop_url)
 
                         # check if x['ke_genes']['value'] column exist, if not do nothing.
                         try:
@@ -230,6 +239,7 @@ class aop:
                         # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                         # append retrieved_ke to list
                         existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
+                        existing_ke[retrive_ke][0].add_aop_url(self.aop_url)
                         self.molecular_init_event.append(retrive_ke)
                         self.list_of_key_events.append(
                             (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
@@ -247,6 +257,7 @@ class aop:
                         new_ke = key_event(ke_identifier, ke_label, ke_title, True)
                         new_ke.set_ke()
                         new_ke.set_aop(self.aop_identifier[0])
+                        new_ke.add_aop_url(self.aop_url)
 
                         # check if x['ke_genes']['value'] column exist, if not do nothing.
                         try:
@@ -263,6 +274,7 @@ class aop:
                         # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                         # append retrieved_ke to list
                         existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
+                        existing_ke[retrive_ke][0].add_aop_url(self.aop_url)
                         self.list_of_key_events.append(
                             (existing_ke[retrive_ke][0], existing_ke[retrive_ke][0].get_ke_numerical_id()))
 

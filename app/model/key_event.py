@@ -21,6 +21,7 @@ class key_event:
         self.ao = False
         self.ke = False
         self.list_of_aop_ids = set()
+        self.set_of_aop_url = set()
 
         # extract numerical id from self.identifier (only if the ke is from AOPWiki)
         if from_aopwiki == True:
@@ -81,6 +82,12 @@ class key_event:
 
     def get_downstream(self):
         return self.list_of_downstream_ke
+
+    def get_upstream_list(self):
+        return list(self.list_of_upstream_ke)
+
+    def get_downstream_list(self):
+        return list(self.list_of_downstream_ke)
 
     # get number of downstream ke
     def get_nr_downstream(self):
@@ -154,3 +161,9 @@ class key_event:
 
     def get_aop(self):
         return list(self.list_of_aop_ids)
+
+    def get_aop_urls(self):
+        return list(self.set_of_aop_url)
+
+    def add_aop_url(self, aop_url):
+        self.set_of_aop_url.add(aop_url)
