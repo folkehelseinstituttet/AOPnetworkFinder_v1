@@ -90,11 +90,11 @@ body {
 
 .bottom-container {
     display: grid;
-    grid-template-columns: 70% 15% 15%;
-    gap: 5%
+    grid-template-columns: 15% 59% 12% 12%;
+    gap: 1.2%;
     align-items: center;
     min-height: 3vh;
-    padding-left: 16.5%;
+    /*padding-left: 16.5%;*/
 }
 
 .bottom-container button {
@@ -107,6 +107,13 @@ body {
     align-items: center;
 }
 
+.bottom-container #saveButtonLog {
+    margin-right: auto;
+}
+
+.bottom-container #mergeButtonKeyEvent {
+    margin-right: auto;
+}
 
 .top-container {
     display: grid;
@@ -200,7 +207,7 @@ body {
 
 /*navbar - logo size and placement */
 nav img {
-    height: 2vw;
+    height: 3vw;
     margin-right: 30%;
 }
 
