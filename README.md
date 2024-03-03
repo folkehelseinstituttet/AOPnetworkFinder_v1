@@ -9,7 +9,7 @@ Finds the status of all AOPs in the webpage AOPWiki.org/aops (OECD Status)
 
 The Current GUI of the AOP_Visualizer webpage:
 
- ![main window](/images/AOP_Visualizer_GUI_web-page.png)
+ ![main window](/images/Figures_AOP-network-finder_02032024-Figure1_Jan.jpg)
 
 
  How to cite the AOP-networkFinder original method: ""
