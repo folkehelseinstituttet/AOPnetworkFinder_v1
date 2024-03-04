@@ -37,8 +37,11 @@
 
                 <!-- Centered Div for Cytoscape graph -->
         <div class="cytoscape-container">
-
-            <!-- Cytoscape Window for displaying AOP grafs -->
+            <div class="toolbar">
+                <!-- clickable icon to save the image -->
+                <img src="{{ url_for('static', filename='images/download_icon_transparent.drawio.svg') }}" alt="Save Graph as Image" id="saveIcon">
+            </div>
+            <!-- Cytoscape Window for displaying AOP graphs -->
             <div id="cy"></div>
         </div>
 

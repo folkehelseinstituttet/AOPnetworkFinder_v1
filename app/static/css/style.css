@@ -44,8 +44,10 @@ body {
 }
 
 .cytoscape-container {
+    position: relative;
     width: 100%;
     min-height: 42vw;
+    overflow: hidden;
 }
 
 
@@ -345,4 +347,33 @@ nav img {
 button:hover {
     background-color: #66b3ff;
 }
+
+.toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1vh;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#saveIcon {
+    cursor: pointer;
+    width: 4%;
+    height: auto;
+    margin-right: 2%;
+}
+
+
+
 

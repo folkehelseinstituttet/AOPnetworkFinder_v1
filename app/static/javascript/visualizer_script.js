@@ -855,6 +855,32 @@ document.getElementById('colorBlindModeToggle').addEventListener('click', functi
     }
 });
 
+document.getElementById('saveIcon').addEventListener('click', function() {
+
+    const fileName = prompt("Enter the filename with extension (.png or .jpg):", "aop.png");
+
+    if (fileName) {
+        let dataUrl;
+
+        if (fileName.endsWith('.png')) {
+            dataUrl = cy.png();
+        } else if (fileName.endsWith('.jpg')) {
+            dataUrl = cy.jpg({bg: "white"});
+        } else {
+            alert("Invalid file extension. Please use .png or .jpg only.");
+            return;
+        }
+
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } else {
+        console.log("Save operation cancelled or invalid filename.");
+    }
+});
 
 document.addEventListener('click', function(event) {
     console.log(event.target); // See which element was clicked
