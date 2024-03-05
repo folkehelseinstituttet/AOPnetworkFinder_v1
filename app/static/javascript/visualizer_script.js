@@ -827,8 +827,35 @@ function applyColorScheme(colors) {
     });
 }
 
-document.getElementById('colorBlindModeToggle').addEventListener('click', function() {
+//document.getElementById('colorBlindModeToggle').addEventListener('click', function() {
+//
+//    if (cy){
+//        //graph initialized, call applyColorchema method
+//        isColorBlindMode = !isColorBlindMode; // Toggle the state
+//
+//        if (isColorBlindMode) {
+//            applyColorScheme(colorBlindColors); // color blind mode
+//            this.style.backgroundColor = "#AADDAA";
+//            this.style.color = "#000000";
+//        } else {
+//            applyColorScheme(defaultColors); // Revert to default colors
+//            this.style.backgroundColor = "";
+//            this.style.color = "";
+//        }
+//    } else {
+//    //graph not initialized, change only state and button color.
+//        isColorBlindMode = !isColorBlindMode //toggle the state
+//        if (isColorBlindMode) {
+//            this.style.backgroundColor = "#AADDAA";
+//            this.style.color = "#000000";
+//        } else {
+//            this.style.backgroundColor = "";
+//            this.style.color = "";
+//        }
+//    }
+//});
 
+function colorBlindModeToggle() {
     if (cy){
         //graph initialized, call applyColorchema method
         isColorBlindMode = !isColorBlindMode; // Toggle the state
@@ -853,7 +880,7 @@ document.getElementById('colorBlindModeToggle').addEventListener('click', functi
             this.style.color = "";
         }
     }
-});
+}
 
 document.getElementById('saveIcon').addEventListener('click', function() {
 
@@ -880,6 +907,20 @@ document.getElementById('saveIcon').addEventListener('click', function() {
     } else {
         console.log("Save operation cancelled or invalid filename.");
     }
+});
+
+document.getElementById('colorBlindNotActive').addEventListener('click', function() {
+    this.style.display = 'none';
+    document.getElementById('colorBlindActive').style.display = 'block';
+    // Enable color blind mode
+    colorBlindModeToggle()
+});
+
+document.getElementById('colorBlindActive').addEventListener('click', function() {
+    this.style.display = 'none';
+    document.getElementById('colorBlindNotActive').style.display = 'block';
+    // Disable color blind mode
+    colorBlindModeToggle()
 });
 
 document.addEventListener('click', function(event) {

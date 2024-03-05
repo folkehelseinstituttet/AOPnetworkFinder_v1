@@ -92,11 +92,11 @@ body {
 
 .bottom-container {
     display: grid;
-    grid-template-columns: 15% 59% 12% 12%;
-    gap: 1.2%;
+    grid-template-columns: 70% 15% 15%;
+    gap: 5%
     align-items: center;
     min-height: 3vh;
-    /*padding-left: 16.5%;*/
+    padding-left: 16.5%;
 }
 
 .bottom-container button {
@@ -107,14 +107,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.bottom-container #saveButtonLog {
-    margin-right: auto;
-}
-
-.bottom-container #mergeButtonKeyEvent {
-    margin-right: auto;
 }
 
 .top-container {
@@ -368,6 +360,21 @@ button:hover {
 }
 
 #saveIcon {
+    cursor: pointer;
+    width: 4%;
+    height: auto;
+    margin-right: 2%;
+}
+
+#colorBlindActive {
+    cursor: pointer;
+    width: 4%;
+    height: auto;
+    margin-right: 2%;
+    display: none;
+}
+
+#colorBlindNotActive {
     cursor: pointer;
     width: 4%;
     height: auto;
