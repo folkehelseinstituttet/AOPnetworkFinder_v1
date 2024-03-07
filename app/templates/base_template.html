@@ -33,25 +33,25 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
         <!-- AOPnetworkFinder Logo -->
-        <a href="/">
+        <a class="nav-icon" href="/">
             <img src="{{ url_for('static', filename='images/logo_transparent.drawio.svg') }}" alt="AOPnetworkFinder Logo">
         </a>
 
         <div class="container">
-            <a class="navbar-brand" href="/">AOPnetworkFinder</a>
+            <a class="navbar-brand " href="/">AOPnetworkFinder</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/AOP_Visualizer">AOP Visualizer</a>
+                        <a class="nav-link {% if request.path == '/AOP_Visualizer' or request.path == '/' %}active{% endif %}" href="/AOP_Visualizer">AOP Visualizer</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/page1">Data Extractor</a>
+                        <a class="nav-link {% if request.path == '/page1' %}active{% endif %}" href="/page1">Data Extractor</a>
                     </li>
                     <!-- <li class="nav-item">
-                        <a class="nav-link" href="/page2">Text Mining</a>
+                        <a class="nav-link {% if request.path == '/page2' %}active{% endif %}" href="/page2">Text Mining</a>
                     </li> -->
                 </ul>
             </div>

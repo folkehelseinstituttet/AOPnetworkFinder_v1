@@ -7,10 +7,10 @@ var cy;
 
 let isColorBlindMode = false; // Track the color mode state
 const defaultColors = {
-    "Molecular Initiating Event": "#00ff00",
-    "Adverse Outcome": "#ff0000",
-    "Key Event": "#ffA500",
-    "genes": "#0000FF",
+    "Molecular Initiating Event": "#00A79D",
+    "Adverse Outcome": "#ED1C24",
+    "Key Event": "#F7941D",
+    "genes": "#27AAE1",
 };
 
 const colorBlindColors = {
@@ -98,7 +98,7 @@ function render_graph(url_string, formData) {
                     style: {
                         'shape': 'square',
                         'label': 'data(id)',
-                        'background-color': '#00ff00'  // Green for 'Key Event'
+                        'background-color': '#00A79D'  // Green for 'Key Event'
                     }
                 },
                 {
@@ -106,21 +106,21 @@ function render_graph(url_string, formData) {
                     style: {
                         'shape': 'triangle',
                         'label': 'data(id)',
-                        'background-color': '#ff0000'  // Red for 'Adverse Outcome'
+                        'background-color': '#ED1C24'  // Red for 'Adverse Outcome'
                     }
                 },
                 {
                     selector: 'node[ke_type="Key Event"]',
                     style: {
                         'label': 'data(id)',
-                        'background-color': '#ffA500'  // Orange for 'Key Event'
+                        'background-color': '#F7941D'  // Orange for 'Key Event'
                     }
                 },
                 {
                     selector: 'node[ke_type="genes"]',
                     style: {
                         'label': 'data(id)',
-                        'background-color': '#0000FF',  // Blue for 'genes'
+                        'background-color': '#27AAE1',  // Blue for 'genes'
                         'width': 10,
                         'height': 10
                     }
