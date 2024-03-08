@@ -890,7 +890,7 @@ document.getElementById('saveIcon').addEventListener('click', function() {
         let dataUrl;
 
         if (fileName.endsWith('.png')) {
-            dataUrl = cy.png();
+            dataUrl = cy.png({bg: "white"});
         } else if (fileName.endsWith('.jpg')) {
             dataUrl = cy.jpg({bg: "white"});
         } else {
@@ -921,6 +921,29 @@ document.getElementById('colorBlindActive').addEventListener('click', function()
     document.getElementById('colorBlindNotActive').style.display = 'block';
     // Disable color blind mode
     colorBlindModeToggle()
+});
+
+document.getElementById('saveStyleIcon').addEventListener('click', function() {
+    const choice = prompt("Type '1' to download the Cytoscape Desktop Standard Style Template or '2' to download the Cytoscape Desktop Color-Blind Style Template:");
+
+    if (choice === null) {
+        return;
+    }
+
+    let fileName;
+    switch(choice) {
+        case '1':
+            fileName = 'Cytoscape_AOPnetworkFinder_Style.xml';
+            break;
+        case '2':
+            fileName = 'Cytoscape_AOPnetworkFinder_Style_Color_Blind.xml';
+            break;
+        default:
+            alert("Invalid choice. Please enter '1' or '2'.");
+            return;
+    }
+
+    window.location.href = `/download/${fileName}`;
 });
 
 document.addEventListener('click', function(event) {

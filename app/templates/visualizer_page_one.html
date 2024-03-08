@@ -35,11 +35,9 @@
 
         <div class="cytoscape-container">
             <div class="toolbar">
-                <!-- Container for color blind icons -->
-
                 <img src="{{ url_for('static', filename='images/color_blind_not_active.drawio.svg') }}" alt="Color Blind Mode Not Active" id="colorBlindNotActive">
                 <img src="{{ url_for('static', filename='images/color_blind_active.drawio.svg') }}" alt="Color Blind Mode Active" id="colorBlindActive">
-
+                <img src="{{ url_for('static', filename='images/cytoscape_style_template_icon.drawio.svg') }}" alt="Save Cytoscape Style Template" id="saveStyleIcon">
                 <img src="{{ url_for('static', filename='images/save_icon_v2.drawio.svg') }}" alt="Save Graph as Image" id="saveIcon">
             </div>
             <div id="cy"></div>

@@ -366,6 +366,13 @@ button:hover {
     margin-right: 2%;
 }
 
+#saveStyleIcon {
+    cursor: pointer;
+    width: 3.3%;
+    height: auto;
+    margin-right: 2%;
+}
+
 #colorBlindActive {
     cursor: pointer;
     width: 4%;

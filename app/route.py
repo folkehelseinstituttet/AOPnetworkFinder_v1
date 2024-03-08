@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, jsonify, send_file
+from flask import render_template, request, jsonify, send_file, send_from_directory
 import app.service.aop_visualizer_service as visualizer_sv
 import app.service.aop_wiki_data_extraction_service as data_extraction_sv
 import app.service.ke_degree_reader_service as ke_reader
@@ -182,3 +182,8 @@ def get_stressors():
     print(stressor_list)
 
     return jsonify(stressor_list)
+
+@app.route('/download/<filename>')
+def download_style_file(filename):
+    directory = "static/cytoscape_style_template"
+    return send_from_directory(directory, filename, as_attachment=True)
