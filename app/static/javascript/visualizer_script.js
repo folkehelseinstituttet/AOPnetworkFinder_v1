@@ -196,12 +196,14 @@ function render_graph(url_string, formData) {
         if (isColorBlindMode){
             applyColorScheme(colorBlindColors);
         }
+        createMergeButtons(globalMergeJson);
 
         cy.on('click', 'node', function(evt) {
             const currentTime = new Date().getTime();
             if (currentTime - lastClickTime <= doubleClickThreshold) {
                 const node = evt.target;
-                let contentHtml = `<strong>Node Data: (${node.data().ke_type})</strong><br><div><table>`;
+                let keTypeColor = getColorByType(node.data().ke_type);
+                let contentHtml = `<strong>Node Data: (<span style="color: ${keTypeColor};">${node.data().ke_type}</span>)</strong><br><div><table>`;
 
                 if (node.data().ke_type === 'genes') {
                     // For Gene nodes
@@ -292,6 +294,38 @@ function render_graph(url_string, formData) {
     .catch(error => console.error('Error:', error));
 }
 
+function getColorByType(ke_type) {
+    if (!isColorBlindMode) {
+        switch (ke_type) {
+            case 'Adverse Outcome':
+                return '#ED1C24'; // Example: Red color for type1
+            case 'Molecular Initiating Event':
+                return '#00A79D'; // Example: Blue color for type2
+            case 'Key Event':
+                return '#F7941D'; // Example: Green color for type3
+            case 'genes':
+                return '#27AAE1'
+            // Add more cases as needed with their corresponding hexadecimal colors
+            default:
+                return '#000000'; // Default color (black) if type is not matched
+        }
+    } else {
+        switch (ke_type) {
+            case 'Adverse Outcome':
+                return '#FF00FF'; // Example: Red color for type1
+            case 'Molecular Initiating Event':
+                return '#40E0D0'; // Example: Blue color for type2
+            case 'Key Event':
+                return '#007FFF'; // Example: Green color for type3
+            case 'genes':
+                return '#708090'
+            // Add more cases as needed with their corresponding hexadecimal colors
+            default:
+                return '#000000'; // Default color (black) if type is not matched
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Get the modal
     var modal = document.getElementById("mergePopup");
@@ -299,16 +333,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get the button that opens the modal
     var btn = document.getElementById("mergeButtonKeyEvent");
 
-    var span = document.getElementsByClassName("close")[0];
+    //var span = document.getElementsByClassName("close")[0];
 
     btn.onclick = function() {
         modal.style.display = "block";
         createMergeButtons(globalMergeJson);
     }
 
-    span.onclick = function() {
+    /*span.onclick = function() {
         modal.style.display = "none";
-    }
+    }*/
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
@@ -418,6 +452,7 @@ function createMergeButtons(mergeOptions) {
 
     container.appendChild(pairDiv); // Add the pair's div to the dynamicButtons container
   });
+  updateMergeButtonLabel(mergeOptions.length);
 }
 
 function populateMergeOptionsDropDown(dropDownKeep, dropDownLose, graphJson) {
@@ -506,10 +541,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (keepNodeId && loseNodeId) {
                 console.log(`Merging: Keep ${keepNodeId}, Lose ${loseNodeId}`);
                 mergeNodes(keepNodeId, loseNodeId); // Perform the merge logic
+                updateMergeButtonLabel(mergePairs.length)
                 //log merging
                 loggingMergeActions(keepNodeId, loseNodeId);
             }
         });
+        const mergePairsCount = document.querySelectorAll('.merge-option-group').length;
+        updateMergeButtonLabel(mergePairsCount);
     });
 });
 
@@ -827,34 +865,6 @@ function applyColorScheme(colors) {
     });
 }
 
-//document.getElementById('colorBlindModeToggle').addEventListener('click', function() {
-//
-//    if (cy){
-//        //graph initialized, call applyColorchema method
-//        isColorBlindMode = !isColorBlindMode; // Toggle the state
-//
-//        if (isColorBlindMode) {
-//            applyColorScheme(colorBlindColors); // color blind mode
-//            this.style.backgroundColor = "#AADDAA";
-//            this.style.color = "#000000";
-//        } else {
-//            applyColorScheme(defaultColors); // Revert to default colors
-//            this.style.backgroundColor = "";
-//            this.style.color = "";
-//        }
-//    } else {
-//    //graph not initialized, change only state and button color.
-//        isColorBlindMode = !isColorBlindMode //toggle the state
-//        if (isColorBlindMode) {
-//            this.style.backgroundColor = "#AADDAA";
-//            this.style.color = "#000000";
-//        } else {
-//            this.style.backgroundColor = "";
-//            this.style.color = "";
-//        }
-//    }
-//});
-
 function colorBlindModeToggle() {
     if (cy){
         //graph initialized, call applyColorchema method
@@ -885,14 +895,20 @@ function colorBlindModeToggle() {
 document.getElementById('saveIcon').addEventListener('click', function() {
 
     const fileName = prompt("Enter the filename with extension (.png or .jpg):", "aop.png");
+    var scale = 2;
 
     if (fileName) {
         let dataUrl;
 
         if (fileName.endsWith('.png')) {
-            dataUrl = cy.png({bg: "white"});
+            dataUrl = cy.png({
+                bg: "white",
+                full: true,
+                scale: scale});
         } else if (fileName.endsWith('.jpg')) {
-            dataUrl = cy.jpg({bg: "white"});
+            dataUrl = cy.jpg({
+                bg: "white",
+                quality: 1});
         } else {
             alert("Invalid file extension. Please use .png or .jpg only.");
             return;
@@ -944,6 +960,15 @@ document.getElementById('saveStyleIcon').addEventListener('click', function() {
     }
 
     window.location.href = `/download/${fileName}`;
+});
+
+function updateMergeButtonLabel(mergeCount) {
+    const mergeButton = document.getElementById('mergeButtonKeyEvent');
+    mergeButton.textContent = `Merge KE: (${mergeCount})`;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('mergeButtonKeyEvent').textContent = 'Merge KE: (0)';
 });
 
 document.addEventListener('click', function(event) {

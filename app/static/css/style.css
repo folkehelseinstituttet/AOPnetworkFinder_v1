@@ -64,6 +64,7 @@ html, body {
 
 .leftside-container #clearSelection {
     margin-top: 10%;
+    width: 100%;
 }
 
 
@@ -91,11 +92,11 @@ html, body {
 
 .bottom-container {
     display: grid;
-    grid-template-columns: 25% 15% 15%;
+    grid-template-columns: 25% 15% 20%;
     gap: 5%
     align-items: center;
     height: 2vh;
-    padding-left: 25%;
+    padding-left: 22%;
 }
 
 .bottom-container button {
@@ -207,51 +208,47 @@ nav img {
 
 /* The popup window */
 .modal {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.4);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Popup Content */
 .popupMerge-content {
-    background-color: #fefefe;
-    width: 65%;
-    height: 65%;
+    background-color: rgba(254, 254, 254, 1);
+    width: 40vw;
+    max-width: 500px;
+    height: 50vh;
     overflow-y: auto;
     border: 1px solid #888;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin: auto;
+    border-radius: 15px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .popup-top {
     display: grid;
-    grid-template-columns: 1.5fr 1.5fr 1fr;
+    grid-template-columns: 1fr 1fr 0.3fr;
+    padding: 10px;
     gap: 10px;
     align-items: end;
     width: 100%;
-    padding-top: 1%;
+    height: 3vh;
 }
 
-.input-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.popup-bottom-wrapper {
-  display: flex;
-  flex: 1;
-  height: 100%;
+.input-group select {
+    width: 175px;
+    max-width: 200%;
+    overflow: hidden;
 }
 
 .modal-second {
@@ -259,10 +256,11 @@ nav img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 3;
   overflow-y: auto;
   padding: 10px;
   text-align: center;
+  height: 35vh;
+  width: 100%;
 }
 
 .modal-second button {
@@ -270,18 +268,9 @@ nav img {
   margin: 5px 0;
 }
 
-.dynamicButtons {
-    width: 150px;
-    height: 50px;
-    margin: 5px;
-}
-
-.modal-third {
-  flex: 1; /* Takes up 1/4 of the space */
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+#dynamicButtons {
+    height: auto;
+    width: 100%;
 }
 
 /* The Close Button */
@@ -304,8 +293,15 @@ nav img {
     cursor: pointer;
 }
 
+.merge-option-group {
+    width: 100%;
+}
+
 .merge-option-button {
     /* Default styles */
+    border-radius: 10px;
+    width: 100%;
+    gap: 5px;
 }
 
 .merge-option-button.active {
@@ -390,6 +386,10 @@ button:hover {
 
 .nav-link.active {
     font-weight: bold;
+}
+
+#processButton {
+    border-radius: 10px;
 }
 
 
