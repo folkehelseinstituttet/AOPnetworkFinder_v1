@@ -16,14 +16,15 @@ def visualize_aop_user_input(aop_ids, checkbox_gene, under_development_chx, endo
     list_of_aop_objects = []
     list_of_ke_objects = []
     list_ke_objects = list(existing_ke_objects)
-    #list_of_ke_objects = []
+    # list_of_ke_objects = []
     if len(list_ke_objects) > 0:
         for ke_object in list_ke_objects:
             ke_id = str(ke_object.get_ke_numerical_id())
             list_of_ke_objects.append((ke_object, ke_id))
 
-
     genesCheckedFlag = checkbox_gene == '1'  # Will be false if it's not 1
+    # TODO: Temporarily hardcoded in, making some adjustments in front end
+    genesCheckedFlag = True
     under_development_flag = under_development_chx == '1'
     endorsed_flag = endorsed_chx == '1'
     under_review_flag = under_review_chx == '1'
@@ -61,15 +62,17 @@ def visualize_aop_user_input(aop_ids, checkbox_gene, under_development_chx, endo
             return aop_cytoscape, list(set_of_unique_aops)
     elif len(set_of_unique_aops) >= 1:
 
-        return visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag, list_of_ke_objects), list(set_of_unique_aops)
+        return visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag, list_of_ke_objects), list(
+            set_of_unique_aops)
 
     return None, []
+
 
 def visualize_only_ke_degrees(existing_ke_objects):
     list_of_aop_objects = []
     list_of_ke_objects = []
     list_ke_objects = list(existing_ke_objects)
-    #list_of_ke_objects = []
+    # list_of_ke_objects = []
     if len(list_ke_objects) > 0:
         for ke_object in list_ke_objects:
             ke_id = str(ke_object.get_ke_numerical_id())

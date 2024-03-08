@@ -193,6 +193,7 @@ function render_graph(url_string, formData) {
         // Inside render_graph, after cy initialization
         setupEdgeAddition(cy);
         toggleGeneLabels(document.getElementById('toggleLabels').checked);
+        toggleGenesNode(document.getElementById('checkedBoxGene').checked);
         if (isColorBlindMode){
             applyColorScheme(colorBlindColors);
         }
@@ -304,7 +305,7 @@ function getColorByType(ke_type) {
             case 'Key Event':
                 return '#F7941D'; // Example: Green color for type3
             case 'genes':
-                return '#27AAE1'
+                return '#27AAE1';
             // Add more cases as needed with their corresponding hexadecimal colors
             default:
                 return '#000000'; // Default color (black) if type is not matched
@@ -312,16 +313,15 @@ function getColorByType(ke_type) {
     } else {
         switch (ke_type) {
             case 'Adverse Outcome':
-                return '#FF00FF'; // Example: Red color for type1
+                return '#FF00FF';
             case 'Molecular Initiating Event':
-                return '#40E0D0'; // Example: Blue color for type2
+                return '#40E0D0';
             case 'Key Event':
-                return '#007FFF'; // Example: Green color for type3
+                return '#007FFF';
             case 'genes':
-                return '#708090'
-            // Add more cases as needed with their corresponding hexadecimal colors
+                return '#708090';
             default:
-                return '#000000'; // Default color (black) if type is not matched
+                return '#000000';
         }
     }
 }
@@ -601,8 +601,13 @@ function generateGraphML(cy) {
     graphml += '<key id="keInAop" for="node" attr.name="ke_in_aop" attr.type="string"/>\n';
     graphml += '<graph id="G" edgedefault="undirected">\n';
 
-    // Add nodes with attributes
+    // Filter and add nodes with attributes, exclude hidden genes if checkbox is unchecked
     cy.nodes().forEach((node) => {
+        if (node.hasClass('hidden') && !document.getElementById('checkedBoxGene').checked) {
+            // If node is hidden and checkbox for showing genes is not checked, skip this node
+            return;
+        }
+
         const data = node.data();
         graphml += `<node id="${data.id}">\n`;
         graphml += `<data key="keType">${data.ke_type}</data>\n`;
@@ -615,12 +620,18 @@ function generateGraphML(cy) {
         graphml += '</node>\n';
     });
 
-    // Add edges
+    // Filter and add edges, exclude those connected to hidden genes if checkbox is unchecked
     cy.edges().forEach((edge) => {
+        if (edge.source().hasClass('hidden') || edge.target().hasClass('hidden')) {
+            if (!document.getElementById('checkedBoxGene').checked) {
+                // If either source or target node is hidden and checkbox for showing genes is not checked, skip this edge
+                return;
+            }
+        }
+
         const data = edge.data();
         graphml += `<edge source="${data.source}" target="${data.target}"></edge>\n`;
     });
-
     graphml += '</graph>\n</graphml>';
     return graphml;
 }
@@ -970,6 +981,32 @@ function updateMergeButtonLabel(mergeCount) {
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('mergeButtonKeyEvent').textContent = 'Merge KE: (0)';
 });
+
+document.getElementById('checkedBoxGene').addEventListener('change', function() {
+    toggleGenesNode(this.checked)
+});
+
+function toggleGenesNode(checked) {
+    if (checked) {
+        cy.elements().removeClass('hidden');
+    } else {
+
+        cy.edges().filter(function(edge) {
+            return edge.source().data('ke_type') === 'genes' || edge.target().data('ke_type') === 'genes';
+        }).addClass('hidden');
+
+        cy.nodes().filter(function(node) {
+            return node.data('ke_type') === 'genes';
+        }).addClass('hidden');
+    }
+
+    cy.style()
+        .selector('.hidden')
+          .style({
+            'display': 'none'
+          })
+        .update();
+}
 
 document.addEventListener('click', function(event) {
     console.log(event.target); // See which element was clicked
