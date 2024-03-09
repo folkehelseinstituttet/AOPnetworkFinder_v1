@@ -801,8 +801,6 @@ function highlightGraphForAop(aopId) {
     }
 }
 
-
-
 $(document).ready(function() {
     $('#aopDropDown').select2({
         placeholder: "Select an AOP to highlight",

@@ -183,6 +183,15 @@ def aop_ao() -> str:
     return ao_string
 
 
+def genes_in_ke_aop() -> str:
+    ke_genes = """ ?aop aopo:has_key_event ?KE .
+    ?KE dc:identifier ?ke_id ;
+         rdfs:label ?ke_label ;
+         dc:title ?ke_title .
+    OPTIONAL {{ ?KE edam:data_1025 ?ke_genes . }}"""
+    return ke_genes
+
+
 def aop_author() -> str:
     author_string = 'OPTIONAL { ?aop dc:creator ?aop_author .}'
     return author_string
@@ -263,6 +272,10 @@ def one_aop(check_box_flag, ke_ids='0', aop_ids='0'):
                 get_ao = aop_ao()
                 # append to incomplete query
                 incomplete_query += '\n' + get_ao
+
+            if chx_name == 'KE Genes' and bool_chx == '1':
+                get_ke_genes_aop = genes_in_ke_aop()
+                incomplete_query += '\n' + get_ke_genes_aop
 
             if chx_name == 'aop_author' and bool_chx == '1':
                 get_author = aop_author()

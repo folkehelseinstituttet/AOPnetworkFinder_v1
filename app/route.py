@@ -141,6 +141,7 @@ def extract_from_aop_wiki():
                           ("ke", request.form.get("aop_chx_ke")),
                           ("mie", request.form.get("aop_chx_mie")),
                           ("ao", request.form.get("aop_chx_ao")),
+                          ("KE Genes", request.form.get("aop_chx_ke_genes")),
                           ("aop_author", request.form.get("aop_chx_author"))]
         print('aop: {}'.format(aop_input))
         print('ke: {}'.format(ke_input))
