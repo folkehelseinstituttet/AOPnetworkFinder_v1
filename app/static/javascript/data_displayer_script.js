@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function render_table(url_string, formData){
+function render_table(url_string, formData) {
     fetch(url_string, {
         method: 'POST',
         body: formData
@@ -32,33 +32,61 @@ function render_table(url_string, formData){
     .then(response => response.json())
     .then(data => {
         const table = document.getElementById('dynamicTable');
+        table.innerHTML = ''; // Clear the table
 
-        // Clear existing table head and body before appending new ones
-        table.innerHTML = '';
-
-        // Extract column headers from jsonData.head.vars
         const columns = data.head.vars;
-
-        // Recreate the table head
         let thead = table.createTHead();
-        let row = thead.insertRow();
+        let headerRow = thead.insertRow();
+
         columns.forEach(header => {
             let th = document.createElement('th');
             th.innerText = header;
-            row.appendChild(th);
+
+            // Create a span element to serve as a drag handle
+            let span = document.createElement('span');
+            span.classList.add('resize-handle');
+            th.appendChild(span);
+
+            headerRow.appendChild(th);
         });
 
-        // Recreate the table body
-        let tbody = document.createElement('tbody'); // Create a new tbody element
-        table.appendChild(tbody); // Append the new tbody to the table
+        let tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
         data.results.bindings.forEach(binding => {
             let row = tbody.insertRow();
             columns.forEach(column => {
                 let cell = row.insertCell();
-                // Insert cell value if available, otherwise insert an empty string
-                cell.innerText = binding[column] && binding[column].value ? binding[column].value : "";
+                let text = binding[column] && binding[column].value ? binding[column].value : "";
+
+                // Create a span for the text
+                let span = document.createElement('span');
+                span.classList.add('cell-text');
+                span.innerText = text;
+
+                // Add a button or link to expand/collapse
+                let toggleButton = document.createElement('a');
+                toggleButton.href = '#';
+                toggleButton.innerText = 'More';
+                toggleButton.classList.add('toggle-text');
+                toggleButton.onclick = function() {
+                    span.classList.toggle('expanded');
+                    toggleButton.innerText = span.classList.contains('expanded') ? 'Less' : 'More';
+                    adjustCellContentVisibility(span.parentElement);
+                    return false;
+                };
+
+                // Initially hide long text if necessary
+                if (text.length > 100) {
+                    span.classList.add('collapsed');
+                    cell.appendChild(span);
+                    cell.appendChild(toggleButton);
+                } else {
+                    cell.appendChild(span); // No need for toggle button if text is short
+                }
             });
         });
+        initializeColumnResizing();
     })
     .catch(error => console.error('Error:', error));
 }
@@ -138,3 +166,54 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('change', clearAOP);
     });
 });
+
+function initializeColumnResizing() {
+    document.querySelectorAll('th .resize-handle').forEach(handle => {
+        handle.addEventListener('mousedown', function(e) {
+            e.preventDefault(); // Avoid text selection
+            console.log('MouseDown on handle detected');
+            let startX = e.pageX;
+            let startWidth = handle.parentElement.offsetWidth;
+
+            function mouseMoveHandler(e) {
+                // Calculate the new width
+                console.log('MouseMove event');
+                let newWidth = startWidth + (e.pageX - startX);
+                console.log(`New Width: ${newWidth}, Current Width: ${handle.parentElement.style.width}`);
+                handle.parentElement.style.width = `${newWidth}px`;
+                adjustCellContentVisibility(handle.parentElement);
+            }
+
+            function mouseUpHandler() {
+                console.log('MouseUp event');
+                document.removeEventListener('mousemove', mouseMoveHandler);
+                document.removeEventListener('mouseup', mouseUpHandler);
+            }
+
+            document.addEventListener('mousemove', mouseMoveHandler);
+            document.addEventListener('mouseup', mouseUpHandler);
+        });
+    });
+}
+
+function adjustCellContentVisibility(column) {
+    let columnIndex = Array.from(column.parentNode.children).indexOf(column) + 1;
+    document.querySelectorAll(`tbody tr td:nth-child(${columnIndex})`).forEach(td => {
+        let cellContent = td.querySelector('.cell-text');
+        if (!cellContent) return; // Skip if no .cell-text
+
+        // Check if the cell content is expanded
+        if (cellContent.classList.contains('expanded')) {
+            cellContent.style.maxWidth = "none";
+            cellContent.style.overflow = "visible";
+            cellContent.style.textOverflow = "clip";
+            cellContent.style.whiteSpace = "normal";
+        } else {
+            cellContent.style.maxWidth = `${td.clientWidth - 10}px`;
+            cellContent.style.overflow = "hidden";
+            cellContent.style.textOverflow = "ellipsis";
+            cellContent.style.whiteSpace = "nowrap";
+        }
+    });
+}
+

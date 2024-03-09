@@ -85,6 +85,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin: 0 auto;
+    table-layout: fixed;
 }
 
 th, td {
@@ -94,8 +95,23 @@ th, td {
 }
 
 th {
-    background-color: #4CAF50;
+    background-color: rgba(0, 128, 255, 1);
     color: white;
+    position: relative;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f0f8ff;
+}
+
+.resize-handle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    cursor: col-resize;
+    user-select: none;
 }
 
 .bottom-container-two {
@@ -129,4 +145,29 @@ th {
 
 button:hover {
     background-color: #66b3ff;
+}
+
+.cell-text {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; /* Or any other width based on your design */
+}
+
+.cell-text.collapsed {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cell-text.expanded {
+    white-space: normal;
+}
+
+.toggle-text {
+    display: block;
+    margin-top: 5px;
+    color: blue;
+    cursor: pointer;
 }
