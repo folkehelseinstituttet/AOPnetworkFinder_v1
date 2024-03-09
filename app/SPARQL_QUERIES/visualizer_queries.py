@@ -200,136 +200,235 @@ def stressor_and_AOP_finder(binary_stressor, aop_id):
 # Dump all AOP data for a given aop, including KE and KER -> query 1 time
 def aop_dump(aop_id):
     # endpoint sparql
-    sparql = SPARQLWrapper(
-        "https://aopwiki.rdf.bigcat-bioinformatics.org/sparql"
-    )
+    sparql = SPARQLWrapper("https://aopwiki.rdf.bigcat-bioinformatics.org/sparql")
 
     if aop_id.isdigit():
-        # use dc:identifier
-        print('AOP_datadump aop_id: {}'.format(aop_id))
+        print(f'AOP_datadump aop_id: {aop_id}')
         sparql.setReturnFormat(JSON)
-        sparql.setQuery("""
+        sparql.setQuery(f"""
 SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?ker_genes ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes ?ke_dwn_label ?ke_dwn_id ?ke_dwn_title ?ke_dwn_genes
 WHERE
-{
-  BIND(aop:""" + aop_id + """ AS ?aop_id)
+{{
+  BIND(aop:{aop_id} AS ?aop_id)
 
   ?AOP a aopo:AdverseOutcomePathway ;
-         dc:identifier ?aop_id;
-         #aopo:has_molecular_initiating_event ?MIE ;
-         rdfs:label ?aop_label ;
-         aopo:has_key_event_relationship ?KER ;
-         aopo:has_key_event ?KE_up .
-         #aopo:has_adverse_outcome ?AO .
+       dc:identifier ?aop_id;
+       rdfs:label ?aop_label .
 
-  OPTIONAL{?AOP aopo:has_molecular_initiating_event ?MIE .}
-  OPTIONAL{?AOP aopo:has_adverse_outcome ?AO .}
+  OPTIONAL {{ ?AOP aopo:has_molecular_initiating_event ?MIE . }}
+  OPTIONAL {{ ?AOP aopo:has_adverse_outcome ?AO . }}
 
-  ?KER a aopo:KeyEventRelationship ;
-         aopo:has_upstream_key_event ?KE_up ;
-         aopo:has_downstream_key_event ?KE_dwn .
-         #edam:data_1025 ?genes .
-  OPTIONAL { ?KER edam:data_1025 ?ker_genes .}
-
-  #ke, data dump - all except AO, need to make one for AO
+  ?AOP aopo:has_key_event ?KE_up .
   ?KE_up dc:identifier ?ke_id ;
          rdfs:label ?ke_label ;
          dc:title ?ke_title .
+  OPTIONAL {{ ?KE_up edam:data_1025 ?ke_genes . }}
 
-  OPTIONAL { ?KE_up edam:data_1025 ?ke_genes .}
+  OPTIONAL {{
+    ?AOP aopo:has_key_event_relationship ?KER .
+    ?KER a aopo:KeyEventRelationship ;
+         aopo:has_upstream_key_event ?KE_up ;
+         aopo:has_downstream_key_event ?KE_dwn .
+    #OPTIONAL {{ ?KER edam:data_1025 ?ker_genes . }}
 
-  ?KE_dwn dc:identifier ?ke_dwn_id ;
-         rdfs:label ?ke_dwn_label ;
-         dc:title ?ke_dwn_title .
+    ?KE_dwn dc:identifier ?ke_dwn_id ;
+            rdfs:label ?ke_dwn_label ;
+            dc:title ?ke_dwn_title .
+    OPTIONAL {{ ?KE_dwn edam:data_1025 ?ke_dwn_genes . }}
+  }}
+}}
+""")
+        try:
+            ret = sparql.query()
+            json_format = ret.convert()
+            return json_format
+        except Exception as e:
+            print(e)
 
-  OPTIONAL { ?KE_dwn edam:data_1025 ?ke_dwn_genes .}
-
-}
-
-                    """)
-
-    try:
-        ret = sparql.query()
-        json_format = ret.convert()
-        ###print(csv_format)
-        '''for x in json_format['results']['bindings']:
-            print(x)'''
-        # if needed convert JSON to CSV.
-        # TODO: return the dictionary for data manipulation
-        return json_format
-    except Exception as e:
-        print(e)
+###def aop_dump(aop_id):
+###    # endpoint sparql
+###    sparql = SPARQLWrapper(
+###        "https://aopwiki.rdf.bigcat-bioinformatics.org/sparql"
+###    )
+###
+###    if aop_id.isdigit():
+###        # use dc:identifier
+###        print('AOP_datadump aop_id: {}'.format(aop_id))
+###        sparql.setReturnFormat(JSON)
+###        sparql.setQuery("""
+###SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?ker_genes ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes ?ke_dwn_label ?ke_dwn_id ?ke_dwn_title ?ke_dwn_genes
+###WHERE
+###{
+###  BIND(aop:""" + aop_id + """ AS ?aop_id)
+###
+###  ?AOP a aopo:AdverseOutcomePathway ;
+###         dc:identifier ?aop_id;
+###         #aopo:has_molecular_initiating_event ?MIE ;
+###         rdfs:label ?aop_label ;
+###         aopo:has_key_event_relationship ?KER ;
+###         aopo:has_key_event ?KE_up .
+###         #aopo:has_adverse_outcome ?AO .
+###
+###  OPTIONAL{?AOP aopo:has_molecular_initiating_event ?MIE .}
+###  OPTIONAL{?AOP aopo:has_adverse_outcome ?AO .}
+###
+###  ?KER a aopo:KeyEventRelationship ;
+###         aopo:has_upstream_key_event ?KE_up ;
+###         aopo:has_downstream_key_event ?KE_dwn .
+###         #edam:data_1025 ?genes .
+###  OPTIONAL { ?KER edam:data_1025 ?ker_genes .}
+###
+###  #ke, data dump - all except AO, need to make one for AO
+###  ?KE_up dc:identifier ?ke_id ;
+###         rdfs:label ?ke_label ;
+###         dc:title ?ke_title .
+###
+###  OPTIONAL { ?KE_up edam:data_1025 ?ke_genes .}
+###
+###  ?KE_dwn dc:identifier ?ke_dwn_id ;
+###         rdfs:label ?ke_dwn_label ;
+###         dc:title ?ke_dwn_title .
+###
+###  OPTIONAL { ?KE_dwn edam:data_1025 ?ke_dwn_genes .}
+###
+###}
+###
+###                    """)
+###
+###    try:
+###        ret = sparql.query()
+###        json_format = ret.convert()
+###        ###print(csv_format)
+###        '''for x in json_format['results']['bindings']:
+###            print(x)'''
+###        # if needed convert JSON to CSV.
+###        # TODO: return the dictionary for data manipulation
+###        return json_format
+###    except Exception as e:
+###        print(e)
 
 
 # Multiple AOP dump, takes a single string variable that contains multiple AOPs.
 # Use the string to query 2 or more AOPs
 # TODO: query needs updating, need to make mie, and aop optional. Not all AOPs have a MIE or AO
+###def multiple_aop_dump(list_of_aop_id):
+###    # endpoint sparql
+###    sparql = SPARQLWrapper(
+###        "https://aopwiki.rdf.bigcat-bioinformatics.org/sparql"
+###    )
+###
+###    if len(list_of_aop_id) > 1:
+###        # use dc:identifier
+###        print('AOP_datadump aop_id: {}'.format(list_of_aop_id))
+###        multiple_aop = ''
+###        skip_or = True
+###        # concatinate multiple_aop, used inside the query
+###        for single_aop in list_of_aop_id:
+###            if skip_or:
+###                multiple_aop += '?aop_id = aop:' + single_aop
+###                skip_or = False
+###            else:
+###                multiple_aop += ' || ?aop_id = aop:' + single_aop
+###        print('variable inside query: {}'.format(multiple_aop))
+###        sparql.setReturnFormat(JSON)
+###        sparql.setQuery("""
+###SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes ?ke_dwn_label ?ke_dwn_id ?ke_dwn_title ?ke_dwn_genes
+###WHERE
+###{
+###
+###  ?AOP a aopo:AdverseOutcomePathway ;
+###         dc:identifier ?aop_id;
+###         rdfs:label ?aop_label ;
+###         aopo:has_key_event_relationship ?KER ;
+###         aopo:has_key_event ?KE_up .
+###
+###  OPTIONAL{?AOP aopo:has_molecular_initiating_event ?MIE .}
+###  OPTIONAL{?AOP aopo:has_adverse_outcome ?AO .}
+###
+###  ?KER a aopo:KeyEventRelationship ;
+###         aopo:has_upstream_key_event ?KE_up ;
+###         aopo:has_downstream_key_event ?KE_dwn .
+###         #edam:data_1025 ?genes .
+###
+###  #ke, data dump - all except AO, need to make one for AO
+###  ?KE_up dc:identifier ?ke_id ;
+###         rdfs:label ?ke_label ;
+###         dc:title ?ke_title .
+###
+###  OPTIONAL { ?KE_up edam:data_1025 ?ke_genes .}
+###
+###  ?KE_dwn dc:identifier ?ke_dwn_id ;
+###         rdfs:label ?ke_dwn_label ;
+###         dc:title ?ke_dwn_title .
+###
+###  OPTIONAL { ?KE_dwn edam:data_1025 ?ke_dwn_genes .}
+###  FILTER (""" + multiple_aop + """)
+###} ORDER BY(?AOP)
+###                    """)
+###
+###    try:
+###        ret = sparql.query()
+###        json_format = ret.convert()
+###        ###print(csv_format)
+###        '''for x in json_format['results']['bindings']:
+###            print(x)'''
+###        # if needed convert JSON to CSV.
+###        # TODO: return the dictionary for data manipulation
+###        return json_format
+###    except Exception as e:
+###        print(e)
+
 def multiple_aop_dump(list_of_aop_id):
     # endpoint sparql
-    sparql = SPARQLWrapper(
-        "https://aopwiki.rdf.bigcat-bioinformatics.org/sparql"
-    )
+    sparql = SPARQLWrapper("https://aopwiki.rdf.bigcat-bioinformatics.org/sparql")
 
-    if len(list_of_aop_id) > 1:
-        # use dc:identifier
-        print('AOP_datadump aop_id: {}'.format(list_of_aop_id))
-        multiple_aop = ''
-        skip_or = True
-        # concatinate multiple_aop, used inside the query
-        for single_aop in list_of_aop_id:
-            if skip_or:
-                multiple_aop += '?aop_id = aop:' + single_aop
-                skip_or = False
-            else:
-                multiple_aop += ' || ?aop_id = aop:' + single_aop
-        print('variable inside query: {}'.format(multiple_aop))
+    if len(list_of_aop_id) > 0:
+        print(f'AOP_datadump aop_ids: {list_of_aop_id}')
+        # Constructing the FILTER condition dynamically
+        filter_conditions = " || ".join([f"?aop_id = aop:{aop}" for aop in list_of_aop_id])
+        print(f'AOP_datadump aop_ids: {filter_conditions}')
         sparql.setReturnFormat(JSON)
-        sparql.setQuery("""
-SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes ?ke_dwn_label ?ke_dwn_id ?ke_dwn_title ?ke_dwn_genes
+        query = f"""
+SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?ker_genes ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes ?ke_dwn_label ?ke_dwn_id ?ke_dwn_title ?ke_dwn_genes
 WHERE
-{
-
+{{
   ?AOP a aopo:AdverseOutcomePathway ;
-         dc:identifier ?aop_id;
-         rdfs:label ?aop_label ;
-         aopo:has_key_event_relationship ?KER ;
-         aopo:has_key_event ?KE_up .
+       dc:identifier ?aop_id;
+       rdfs:label ?aop_label .
 
-  OPTIONAL{?AOP aopo:has_molecular_initiating_event ?MIE .}
-  OPTIONAL{?AOP aopo:has_adverse_outcome ?AO .}
+  OPTIONAL {{ ?AOP aopo:has_molecular_initiating_event ?MIE . }}
+  OPTIONAL {{ ?AOP aopo:has_adverse_outcome ?AO . }}
 
-  ?KER a aopo:KeyEventRelationship ;
-         aopo:has_upstream_key_event ?KE_up ;
-         aopo:has_downstream_key_event ?KE_dwn .
-         #edam:data_1025 ?genes .
-
-  #ke, data dump - all except AO, need to make one for AO
+  ?AOP aopo:has_key_event ?KE_up .
   ?KE_up dc:identifier ?ke_id ;
          rdfs:label ?ke_label ;
          dc:title ?ke_title .
+  OPTIONAL {{ ?KE_up edam:data_1025 ?ke_genes . }}
 
-  OPTIONAL { ?KE_up edam:data_1025 ?ke_genes .}
+  OPTIONAL {{
+    ?AOP aopo:has_key_event_relationship ?KER .
+    ?KER a aopo:KeyEventRelationship ;
+         aopo:has_upstream_key_event ?KE_up ;
+         aopo:has_downstream_key_event ?KE_dwn .
+    #OPTIONAL {{ ?KER edam:data_1025 ?ker_genes . }}
 
-  ?KE_dwn dc:identifier ?ke_dwn_id ;
-         rdfs:label ?ke_dwn_label ;
-         dc:title ?ke_dwn_title .
+    ?KE_dwn dc:identifier ?ke_dwn_id ;
+            rdfs:label ?ke_dwn_label ;
+            dc:title ?ke_dwn_title .
+    OPTIONAL {{ ?KE_dwn edam:data_1025 ?ke_dwn_genes . }}
+  }}
+  FILTER ({filter_conditions})
+}}
+ORDER BY(?AOP)
+"""
+        sparql.setQuery(query)
 
-  OPTIONAL { ?KE_dwn edam:data_1025 ?ke_dwn_genes .}
-  FILTER (""" + multiple_aop + """)
-} ORDER BY(?AOP)
-                    """)
-
-    try:
-        ret = sparql.query()
-        json_format = ret.convert()
-        ###print(csv_format)
-        '''for x in json_format['results']['bindings']:
-            print(x)'''
-        # if needed convert JSON to CSV.
-        # TODO: return the dictionary for data manipulation
-        return json_format
-    except Exception as e:
-        print(e)
+        try:
+            ret = sparql.query()
+            json_format = ret.convert()
+            return json_format
+        except Exception as e:
+            print(e)
 
 
 # if AOP-dump is used, call this method. (retrieve AO data)
