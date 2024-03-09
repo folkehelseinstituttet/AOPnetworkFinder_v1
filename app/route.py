@@ -4,9 +4,6 @@ import app.service.aop_visualizer_service as visualizer_sv
 import app.service.aop_wiki_data_extraction_service as data_extraction_sv
 import app.service.ke_degree_reader_service as ke_reader
 import logging
-##import pandas as pd
-from io import BytesIO
-from openpyxl import Workbook
 
 # Page Routing
 @app.route("/")
@@ -152,29 +149,6 @@ def extract_from_aop_wiki():
         return jsonify(json_file)
 
     return render_template('data_displayer_page_two.html', data=None)
-
-
-
-@app.route('/save-excel', methods=['POST'])
-def save_excel():
-
-    data = request.json['data']
-
-    wb = Workbook()
-    ws = wb.active
-
-    if data:
-        ws.append(list(data[0].keys()))
-
-    for item in data:
-        ws.append(list(item.values()))
-
-    excel_file = BytesIO()
-    wb.save(excel_file)
-    excel_file.seek(0)
-
-    return send_file(excel_file, attachment_filename="table_data.xlsx", as_attachment=True, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-
 
 @app.route('/get_stressors')
 def get_stressors():

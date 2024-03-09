@@ -119,25 +119,27 @@ document.getElementById('saveCsvBtn').addEventListener('click', function() {
 
 document.getElementById('saveExcelBtn').addEventListener('click', function() {
     const table = document.getElementById('dynamicTable');
-    let tableData = [];
+    let worksheet_data = [];
 
-    fetch('/save-excel', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({data: tableData})
-    })
-    .then(response => response.blob())
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'table_data.xlsx');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    });
+    // Iterate over each row in the table
+    for (let i = 0; i < table.rows.length; i++) {
+        let row_data = [], cols = table.rows[i].querySelectorAll("td, th");
+
+        // Iterate over each column in the row
+        cols.forEach(function(col) {
+            row_data.push(col.innerText);
+        });
+
+        worksheet_data.push(row_data);
+    }
+
+    // Create a new workbook and add the worksheet
+    let wb = XLSX.utils.book_new();
+    let ws = XLSX.utils.aoa_to_sheet(worksheet_data);
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+    // Generate an Excel file
+    XLSX.writeFile(wb, "table_data.xlsx");
 });
 
 document.addEventListener('DOMContentLoaded', function() {
