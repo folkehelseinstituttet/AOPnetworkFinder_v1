@@ -1,10 +1,5 @@
 // cytoscape_script.js
 
-// Button event handler for exporting to Cytoscape
-document.getElementById('exportToCytoscape').addEventListener('click', function() {
-    // Logic related to Exporting to Cytoscape
-});
-
 //search field AOP
 document.getElementById('searchFieldAOP').addEventListener('keypress', function(event) {
     var charCode = event.which || event.keyCode; // Get the ASCII character code
@@ -22,8 +17,23 @@ document.getElementById('searchFieldAOP').addEventListener('keypress', function(
     }
 });
 
-//search field KE
-document.getElementById('searchFieldKe').addEventListener('keypress', function(event) {
+document.getElementById('searchFieldAOP').addEventListener('paste', function(event) {
+
+    var pasteData = event.clipboardData || window.clipboardData;
+    var pastedText = pasteData.getData('text');
+
+    var validatedText = pastedText.replace(/[^0-9,]/g, '')
+                                 .replace(/,,+/g, ',')
+                                 .replace(/^,/, '');
+
+    if (validatedText !== pastedText) {
+        event.preventDefault();
+
+        event.target.value = validatedText;
+    }
+});
+
+document.getElementById('searchFieldKE').addEventListener('keypress', function(event) {
     var charCode = event.which || event.keyCode; // Get the ASCII character code
 
     // Allow only digits and commas
@@ -39,5 +49,18 @@ document.getElementById('searchFieldKe').addEventListener('keypress', function(e
     }
 });
 
+document.getElementById('searchFieldKE').addEventListener('paste', function(event) {
 
+    var pasteData = event.clipboardData || window.clipboardData;
+    var pastedText = pasteData.getData('text');
 
+    var validatedText = pastedText.replace(/[^0-9,]/g, '')
+                                 .replace(/,,+/g, ',')
+                                 .replace(/^,/, '');
+
+    if (validatedText !== pastedText) {
+        event.preventDefault();
+
+        event.target.value = validatedText;
+    }
+});
