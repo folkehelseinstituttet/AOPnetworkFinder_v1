@@ -54,6 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append("searchFieldAOP", searchValueAop);
             formData.append("searchFieldKE", searchValueKe);
             formData.append("stressorDropdown", searchValueStressor);
+            // Append the CSRF token to the FormData object
+            var csrfToken = document.getElementById('csrf_token').value;
+            formData.append('csrf_token', csrfToken);
 
             logUserInput(formData)
             render_graph('/searchAops', formData);
@@ -68,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function() {
 function render_graph(url_string, formData) {
     fetch(url_string, {
         method: 'POST',
-        body: formData
+        body: formData,
+        credentials: 'same-origin'
     })
     .then(response => response.json())
     .then(cyData => {

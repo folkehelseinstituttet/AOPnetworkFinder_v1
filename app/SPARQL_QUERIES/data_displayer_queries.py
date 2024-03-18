@@ -184,11 +184,10 @@ def aop_ao() -> str:
 
 
 def genes_in_ke_aop() -> str:
-    ke_genes = """ ?aop aopo:has_key_event ?KE .
-    ?KE dc:identifier ?ke_id ;
-         rdfs:label ?ke_label ;
-         dc:title ?ke_title .
-    OPTIONAL {{ ?KE edam:data_1025 ?ke_genes . }}"""
+    ke_genes = """ ?aop aopo:has_key_event ?ke .
+    ?ke rdfs:label ?ke_label ;
+         dc:title ?ke_name .
+    OPTIONAL {{ ?ke edam:data_1025 ?ke_genes . }}"""
     return ke_genes
 
 

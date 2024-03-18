@@ -14,6 +14,7 @@
                 <!--Aops search field -->
                 <input type="text" id="searchFieldAOPs" name="searchFieldAOPs" class="search-field-aops" placeholder="17 or 17,260,12,13..." />
             </div>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
 
         <form id="ke_search_form" action="data-extraction-submit" method="post">
@@ -22,6 +23,7 @@
                 <!--Aops search field -->
                 <input type="text" id="searchFieldKEs" name="searchFieldKEs" class="search-field-kes" placeholder="17 or 17,260,12,13..." />
             </div>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
     </div>
 

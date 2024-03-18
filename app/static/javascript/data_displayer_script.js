@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append(checkbox.name, checkbox.checked ? "1" : "0");
         });
 
+        var csrfToken = document.querySelector('input[name="csrf_token"]').value;
+        formData.append('csrf_token', csrfToken);
+
         render_table('/data-extraction-submit', formData)
     });
 });

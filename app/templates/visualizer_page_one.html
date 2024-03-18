@@ -2,14 +2,7 @@
 
 {% block content %}
     <div class="top-container">
-            <!-- Search Field 1
-        <div class="search-group" id="searchGroupStressor">
-            <label for="stressorDropdown">Stressor:</label>
-            <select id="stressorDropdown">
-                <option></option>
-            </select>
-        </div>
-        -->
+        <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
     </div>
 
     <div class="parent-container">
