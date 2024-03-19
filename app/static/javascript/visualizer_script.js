@@ -26,7 +26,6 @@ const doubleClickThreshold = 300; // Milliseconds
 //sending the user inputted values to the backend for processing
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("searchButtonAOP").addEventListener("click", function(event) {
-        console.log('Pressing the button searchButtonAOP')
         event.preventDefault();
 
         // Global log file should be reset everytime user generates a new graph. (new session)
@@ -76,7 +75,6 @@ function render_graph(url_string, formData) {
     })
     .then(response => response.json())
     .then(cyData => {
-        console.log(cyData);
         globalGraphJson = cyData.elements;
         globalMergeJson = cyData['merge_options:'];
         console.log(globalMergeJson);
@@ -408,7 +406,6 @@ function mergeNodes(keepNodeId, loseNodeId) {
     loseNode.remove();
     removeButtonPairs(keepNodeId, loseNodeId);
     //update globaljsonmerge
-    console.log("merge options {}",globalMergeJson);
     globalMergeJson = globalMergeJson.filter(([source, target]) => source !== loseNodeId && target !== loseNodeId);
 
     globalGraphJson.nodes = globalGraphJson.nodes.filter(node => node.data.name !== loseNodeId);
@@ -523,7 +520,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         //Button merge process
         const mergePairs = document.querySelectorAll('.merge-option-group');
-        console.log('merge pairs:', mergePairs);
 
         mergePairs.forEach(pair => {
             const buttons = pair.querySelectorAll('.merge-option-button');
@@ -688,48 +684,39 @@ function logUserInput(formData) {
     logHeaderName("USER INPUTS\n")
 
     if (formData.get("searchFieldAOP")){
-        console.log("logging Aop field: {}", formData.get("searchFieldAOP"));
         logUserAction(formData.get("searchFieldAOP"));
     }
 
     if (formData.get("searchFieldKE")){
-        console.log("logging KE field: {}", formData.get("searchFieldKE"));
         logUserAction(formData.get("searchFieldKE"));
     }
 
     if (formData.get("stressorDropdown")){
-        console.log("logging Stressor field: {}", formData.get("stressorDropdown"));
         logUserAction(formData.get("stressorDropdown"));
     }
 
     logHeaderName("\n")
 
     if (formData.get("checkedBoxGene") === '1'){
-        console.log("logging Stressor field: {}", formData.get("stressorDropdown"));
         logUserAction("Genes enabled");
     }else{
-        console.log("logging Stressor field: {}", formData.get("stressorDropdown"));
         logUserAction("Genes disabled");
     }
 
     logHeaderName("\nFilters Enabled\n")
     if (formData.get("checkboxDevelopment") === '1'){
-        console.log("logging checkboxDevelopment field: {}", formData.get("checkboxDevelopment"));
         logUserAction("OECD Under Development");
     }
 
     if (formData.get("checkboxEndorsed") === '1'){
-        console.log("logging checkboxEndorsed field: {}", formData.get("checkboxEndorsed"));
         logUserAction("OECD WPHA Endorsed");
     }
 
     if (formData.get("checkboxReview") === '1'){
-        console.log("logging checkboxReview field: {}", formData.get("checkboxReview"));
         logUserAction("OECD Under Review");
     }
 
     if (formData.get("checkboxApproved") === '1'){
-        console.log("logging checkboxApproved field: {}", formData.get("checkboxApproved"));
         logUserAction("OECD EAGMST Approved");
     }
 }
@@ -813,14 +800,8 @@ $(document).ready(function() {
 
     $('#aopDropDown').on('select2:select', function(e) {
         var selectedAop = $(this).val();
-        console.log("Selected AOP", selectedAop);
         highlightGraphForAop(selectedAop);
     });
-
-    //$('#aopDropDown').on('select2:unselect', function(e) {
-    //    highlightGraphForAop(null);
-    //});
-
     // Custom clear button functionality
     $('#clearSelection').on('click', function() {
         $('#aopDropDown').val(null).trigger('change');
@@ -1010,6 +991,6 @@ function toggleGenesNode(checked) {
         .update();
 }
 
-document.addEventListener('click', function(event) {
-    console.log(event.target); // See which element was clicked
-});
+//document.addEventListener('click', function(event) {
+//    console.log(event.target); // See which element was clicked
+//});

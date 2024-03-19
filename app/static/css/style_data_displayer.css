@@ -152,7 +152,7 @@ button:hover {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 150px; /* Or any other width based on your design */
+    max-width: 150px;
 }
 
 .cell-text.collapsed {

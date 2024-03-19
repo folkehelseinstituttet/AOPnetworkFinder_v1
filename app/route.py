@@ -33,15 +33,10 @@ def page_two():
 # Post requests
 @app.route("/searchAops", methods=['POST'])
 def search_aops():
-    print(request.form)
     ##validate the formdata
     form = AopKeFormValidation(formdata=request.form)
-    print("formdata: {}".format(form.data))
+
     if form.validate_on_submit():
-        print("Form validated successfully.")
-        print("AOP Query Form Data:", form.searchFieldAOP.data)
-        print("KE Query Form Data:", form.searchFieldKE.data)
-        print("Stressor Query Form Data:", form.stressorDropdown.data)
         #sanitize aop_query and ke_query forms
         sanitize_form(form)
         # Retrieve the query from the form
@@ -57,10 +52,6 @@ def search_aops():
         ke_degree = request.form.get("keDegree")
 
         logging.debug(f"aop_query from the search field in front-end {aop_query}")
-        print('Test aopQuery: {}'.format(aop_query))
-        print('Test gene_checkbox: {}'.format(gene_checkbox))
-        print('ke_query: {}'.format(ke_query))
-        print('ke_degree: {}'.format(ke_degree))
 
         # Attempt to retrieve the stressor list from cache
         stressors = cache.get('get_stressors')
@@ -76,10 +67,8 @@ def search_aops():
             # valid stressor submition
             stressor_query_validation = True
 
-        print("aop validatio")
         # input validation and sanitation
         aop_query_validation = input_validation.validate_aop_ke_inputs(aop_query)
-        print("ke validatio")
         ke_query_validation = input_validation.validate_aop_ke_inputs(ke_query)
 
         if aop_query_validation is False and ke_query_validation is False and stressor_query_validation is False:
@@ -126,7 +115,6 @@ def search_aops():
         aop_list.extend(aop_stressor_list)
         #remove empty strings
         aop_list_filtered = [aop for aop in aop_list if aop != '']
-        print(aop_list_filtered)
 
         if len(aop_list_filtered) == 0 and len(unique_ke_set) > 0:
             aop_cytoscape, aop_after_filter = visualizer_sv.visualize_only_ke_degrees(unique_ke_set)
@@ -150,8 +138,6 @@ def search_aops():
             'aop_before_filter': aop_list_filtered,
             'aop_after_filter': aop_after_filter
         }
-        #print('Delete later')
-        print('Output before sending to front-end: {}'.format(final_response))
         return jsonify(final_response)
     return render_template('visualizer_page_one.html', data=None)
 
@@ -160,13 +146,12 @@ def search_aops():
 def extract_from_aop_wiki():
 
     form = AopKeFormDataExtractionValidation(formdata=request.form)
-    print("formdata: {}".format(form.data))
+
     if form.validate_on_submit():
         aop_input = form.searchFieldAOPs.data
         ke_input = form.searchFieldKEs.data
         sanitize_form_extraction(form)
-        print(aop_input)
-        print(ke_input)
+
         if aop_input == '':
             ke_list_tuple = [("In AOP", request.form.get("ke_chx_in_aop")),
                              ("ke stressor", request.form.get("ke_chx_stressor")),
@@ -174,12 +159,9 @@ def extract_from_aop_wiki():
                              ("ke cell type context", request.form.get("ke_chx_cell_type")),
                              ("ke description", request.form.get("ke_chx_description")),
                              ("ke measurements", request.form.get("ke_chx_measurements"))]
-            print('aop: {}'.format(aop_input))
-            print('ke: {}'.format(ke_input))
+
             json_file, column_header = data_extraction_sv.query_sparql(ke_list_tuple, aop_input, ke_input)
-            print("aop_list_tuples {}".format(ke_list_tuple))
-            print("json: {}".format(json_file))
-            print("header: {}".format(column_header))
+
             return jsonify(json_file)
         else:
             aop_list_tuple = [("abstract", request.form.get("aop_chx_abstract")),
@@ -189,12 +171,9 @@ def extract_from_aop_wiki():
                               ("ao", request.form.get("aop_chx_ao")),
                               ("KE Genes", request.form.get("aop_chx_ke_genes")),
                               ("aop_author", request.form.get("aop_chx_author"))]
-            print('aop: {}'.format(aop_input))
-            print('ke: {}'.format(ke_input))
+
             json_file, column_header = data_extraction_sv.query_sparql(aop_list_tuple, aop_input, ke_input)
-            print("aop_list_tuples {}".format(aop_list_tuple))
-            print("json: {}".format(json_file))
-            print("header: {}".format(column_header))
+
             return jsonify(json_file)
     return render_template('data_displayer_page_two.html', data=None)
 
@@ -203,7 +182,6 @@ def extract_from_aop_wiki():
 def get_stressors():
     # Populate data with stressor name
     stressor_list = visualizer_sv.get_all_stressors_from_aop_wiki()
-    print(stressor_list)
 
     return jsonify(stressor_list)
 

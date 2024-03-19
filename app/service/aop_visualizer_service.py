@@ -1,9 +1,5 @@
-import json
 from collections import defaultdict
-
 import networkx
-from flask import jsonify
-
 import app.SPARQL_QUERIES.visualizer_queries as sq
 import app.model.aop as aop
 import app.service.plot_aop_service as plot_aop
@@ -46,7 +42,6 @@ def visualize_aop_user_input(aop_ids, checkbox_gene, under_development_chx, endo
     # One AOP
     if len(set_of_unique_aops) == 1:
         aop_rdf_data = sq.aop_dump(next(iter(set_of_unique_aops)))
-        print(aop_rdf_data)
         if len(aop_rdf_data['results']['bindings']) != 0:
             tmp_aop = aop.aop(aop_rdf_data, list_of_ke_objects, False)
             list_of_aop_objects.append(tmp_aop)
@@ -57,8 +52,6 @@ def visualize_aop_user_input(aop_ids, checkbox_gene, under_development_chx, endo
 
             # can convert the networkx graph to a valid Cytoscape graph. Which is used to display the graph to the user in the front-end
             aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
-            print('one aop, unique_ke: {}'.format(list_ke_objects))
-            print('one aop, original: {}'.format(list_of_ke_objects))
             return aop_cytoscape, list(set_of_unique_aops)
     elif len(set_of_unique_aops) >= 1:
 
@@ -85,8 +78,6 @@ def visualize_only_ke_degrees(existing_ke_objects):
 
         # can convert the networkx graph to a valid Cytoscape graph. Which is used to display the graph to the user in the front-end
         aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
-        print('one aop, unique_ke: {}'.format(list_ke_objects))
-        print('one aop, original: {}'.format(list_of_ke_objects))
         return aop_cytoscape, []
 
     return None, []
@@ -116,7 +107,6 @@ def filter_aops(under_development_chx, endorsed_chx, under_review_chx, approved_
     '''Regex pattern for only numbers (extract AOP ID)'''
     pattern = r"\d+"
 
-    print('Inside aop_filter_data')
     for aop_data in json_aop_filter['results']['bindings']:
         '''Extract AOP ID from json file using regex'''
         match = re.search(pattern, aop_data['aop_id']['value'])
@@ -145,7 +135,6 @@ def visualize_multiple_aops(set_of_unique_aops, genesCheckedFlag):
 
     # can convert the networkx graph to a valid Cytoscape graph. Which is used to display the graph to the user in the front-end
     aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
-    print('multiple_aop_query {}:'.format(aop_rdf_data))
     return aop_cytoscape
 
 
@@ -176,12 +165,6 @@ def visualize_multiple_aops_v2(set_of_unique_aops, genesCheckedFlag, existing_ke
 
     # can convert the networkx graph to a valid Cytoscape graph. Which is used to display the graph to the user in the front-end
     aop_cytoscape = networkx.cytoscape_data(relabeled_graph)
-    print('group_by_aop:')
-    for aop_inside in grouped_by_aop:
-        print(aop_inside)
-
-    print('unique_ke_original {}'.format(list_of_unique_ke))
-    print('ke_obect_from_parameter {}'.format(existing_ke_objects))
 
     return aop_cytoscape
 
@@ -203,7 +186,6 @@ def merge_activation(unique_key_events):
 
             if lev_distance < 7:
                 '''Found a possible match, append the ke object'''
-                print('merge possible ke: ', (outer_node, inner_node))
                 ordered_tuple = tuple(sorted((outer_node, inner_node)))
                 set_matched_tuples.add((ordered_tuple[0], ordered_tuple[1]))
     # convert set to list, as json serialization doesnt support sets
@@ -213,12 +195,11 @@ def merge_activation(unique_key_events):
 
 def find_all_ke_from_json(json_string):
     ke_from_json = set()
-    print('inside find all ke: {}'.format(json_string))
+
     for node in json_string["elements"]["nodes"]:
         if node["data"]["ke_type"] != 'genes':
             ke_from_json.add(node["data"]["name"])
 
-    print("ke_from_json: {}".format(ke_from_json))
     return ke_from_json
 
 

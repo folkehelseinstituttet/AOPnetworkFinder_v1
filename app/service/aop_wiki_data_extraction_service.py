@@ -2,9 +2,6 @@ import app.SPARQL_QUERIES.data_displayer_queries as dp_queries
 
 def query_sparql(list_of_checkboxes, aop_input, ke_input):
 
-    print(list_of_checkboxes)
-    print('Get data from AOP-Wiki')
-
     # FOR TESTING - REMOVE LATER
     # one_aop returns json_file and column header keys
     json_file, column_header = dp_queries.one_aop(list_of_checkboxes,

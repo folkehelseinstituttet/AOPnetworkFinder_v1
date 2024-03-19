@@ -127,14 +127,11 @@ def concat_clauses(qry) -> str:
 
     """Split qry, and retrieve all terms that have exclamation mark as prefix"""
     list_terms = qry.split()
-    print(list_terms)
     # column header only contains terms with exclamation as prefix
     column_header = [term for term in list_terms if '?' in term]
     # remove duplicates from column_header if there are any
     dup_removal_col_header = [*set(column_header)]
 
-    print(column_header)
-    print('dup_removal_col_header', dup_removal_col_header)
     """Concatenate columns to select"""
     for term in dup_removal_col_header:
         select_str += term + ' '
@@ -143,7 +140,6 @@ def concat_clauses(qry) -> str:
 
     # completed query - The one we are using to retrieve data from AOPWiki
     final_query = select_str + '\n' + where_str
-    print(final_query)
 
     return final_query, dup_removal_col_header
 
@@ -209,23 +205,17 @@ def one_aop(check_box_flag, ke_ids='0', aop_ids='0'):
     )
 
     tmp_flags = check_box_flag  # TODO: add functionality when checkboxes are implemented.
-    print('inside query checkboxes tuples: {}'.format(check_box_flag))
-    print('inside query ke: {}'.format(ke_ids))
-    print('inside query aops: {}'.format(aop_ids))
 
     '''first check if ke_ids and aop_ids for default value 0'''
     ke_flag = False
     aop_flag = False
-    print('ke_id', ke_ids)
-    print('aop_id', aop_ids)
+
     if ke_ids != '':
         ke_flag = True
 
     if aop_ids != '':
         aop_flag = True
 
-    print('ke_flag', ke_flag)
-    print('aop_flag', aop_flag)
     query_both = ''
     if aop_flag is False and ke_flag is False:
         '''Only show default for aop'''

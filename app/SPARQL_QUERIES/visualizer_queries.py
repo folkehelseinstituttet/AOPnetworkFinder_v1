@@ -12,7 +12,6 @@ def one_aop(aop_id):
 
     if aop_id.isdigit():
         # use dc:identifier
-        print('ok+ aop_id: {}'.format(aop_id))
         sparql.setReturnFormat(JSON)
         sparql.setQuery("""
                     SELECT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?genes
@@ -74,7 +73,6 @@ def stressor_AOP_finder(bin_stress):
     else:
         # dc:title
         stressor = '\'' + bin_stress + '\''
-        print(bin_stress)
         sparql.setReturnFormat(JSON)
         query = """SELECT ?stressor ?AOP ?aop_id
                             WHERE{
@@ -93,10 +91,6 @@ def stressor_AOP_finder(bin_stress):
 
         ret = sparql.query()
         json_format = ret.convert()
-        # remove prints later
-        print(json_format)
-        '''for x in json_format['results']['bindings']:
-            print(x)'''
         # if needed convert JSON to CSV.
         # TODO: return the dictionary for data manipulation
         return json_format
@@ -176,10 +170,6 @@ def stressor_and_AOP_finder(binary_stressor, aop_id):
 
         ret = sparql.query()
         json_format = ret.convert()
-        # remove prints later
-        print(json_format)
-        '''for x in json_format['results']['bindings']:
-            print(x)'''
         # if needed convert JSON to CSV.
         # TODO: return the dictionary for data manipulation
         return json_format
@@ -203,7 +193,6 @@ def aop_dump(aop_id):
     sparql = SPARQLWrapper("https://aopwiki.rdf.bigcat-bioinformatics.org/sparql")
 
     if aop_id.isdigit():
-        print(f'AOP_datadump aop_id: {aop_id}')
         sparql.setReturnFormat(JSON)
         sparql.setQuery(f"""
 SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?ker_genes ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes ?ke_dwn_label ?ke_dwn_id ?ke_dwn_title ?ke_dwn_genes
@@ -383,10 +372,8 @@ def multiple_aop_dump(list_of_aop_id):
     sparql = SPARQLWrapper("https://aopwiki.rdf.bigcat-bioinformatics.org/sparql")
 
     if len(list_of_aop_id) > 0:
-        print(f'AOP_datadump aop_ids: {list_of_aop_id}')
         # Constructing the FILTER condition dynamically
         filter_conditions = " || ".join([f"?aop_id = aop:{aop}" for aop in list_of_aop_id])
-        print(f'AOP_datadump aop_ids: {filter_conditions}')
         sparql.setReturnFormat(JSON)
         query = f"""
 SELECT DISTINCT ?AOP ?MIE ?KE_up ?KE_dwn ?AO ?ker_genes ?aop_id ?aop_label ?ke_id ?ke_label ?ke_title ?ke_genes ?ke_dwn_label ?ke_dwn_id ?ke_dwn_title ?ke_dwn_genes
@@ -440,7 +427,6 @@ def ao_dump(aop_id):
 
     if aop_id.isdigit():
         # use dc:identifier
-        print('AOP_datadump aop_id: {}'.format(aop_id))
         sparql.setReturnFormat(JSON)
         sparql.setQuery("""
 SELECT distinct ?ao ?ao_id ?label ?name ?genes ?aop_id
@@ -482,7 +468,6 @@ def stressor_dump():
         "https://aopwiki.rdf.bigcat-bioinformatics.org/sparql"
     )
 
-    print('stressor_datadump aop_id:')
     sparql.setReturnFormat(JSON)
     sparql.setQuery("""
     SELECT ?stressor ?str_id ?str_label ?str_title
@@ -527,7 +512,6 @@ def ke_get_aopid(list_of_ke_id):
         else:
             multiple_ke += ' || ?ke_id = aop.events:' + single_ke
 
-    print('ke_id:')
     sparql.setReturnFormat(JSON)
     sparql.setQuery("""
     SELECT ?aop_id
@@ -763,9 +747,6 @@ WHERE {
     try:
         ret = sparql.query()
         json_format = ret.convert()
-        ###print(csv_format)
-        '''for x in json_format['results']['bindings']:
-            print(x)'''
         # if needed convert JSON to CSV.
         # TODO: return the dictionary for data manipulation
         return json_format
@@ -1098,7 +1079,6 @@ def ke_get_ao(list_of_ke_id):
         else:
             multiple_ke += ' || ?ke_type = aop.events:' + single_ke
 
-    print('ke_id:')
     sparql.setReturnFormat(JSON)
     sparql.setQuery("""
 SELECT ?ke ?ao
@@ -1145,9 +1125,7 @@ def ke_get_mie(list_of_ke_id):
             skip_or = False
         else:
             multiple_ke += ' || ?ke_type = aop.events:' + single_ke
-    print('multiple_ke_sparql: ', multiple_ke)
 
-    print('ke_id:')
     sparql.setReturnFormat(JSON)
     sparql.setQuery("""
 SELECT ?ke ?mie
@@ -1193,7 +1171,6 @@ def aop_status(list_of_statuses):
             skip_or = False
         else:
             aop_filter += " || ?status = '" + one_filter + "'"
-    print('multiple_aop_filter: ', aop_filter)
 
     sparql.setReturnFormat(JSON)
     sparql.setQuery("""

@@ -34,16 +34,12 @@ def plot(aop_list, unique_key_events):
         for x in unique_key_events:
             ke_list.append(x)
 
-        print('inside plot:')
         for ke, id in ke_list:
-            print('KE id: {}'.format(id))
             # add ke graph node to aop_graph
             if aop_graph.has_node(ke) == False:
                 # add node to graph
                 aop_graph.add_node(ke, label=ke.get_label(), ke_type=ke.print_ke_type(), ke_in_aop=ke.get_aop(), ke_identifier=ke.get_identifier(), ke_aop_urls=ke.get_aop_urls(), ke_url=ke.get_identifier())
-                print('1 - label: {}, type: {}, ke in aop: {}'.format(ke.get_label(),
-                                                                      ke.print_ke_type(),
-                                                                      ke.get_aop()))  # Remove later, used for debugging
+
                 # add genes to graph
                 gene_plotter_helper(ke, aop_graph)
             # upstream node
@@ -63,8 +59,7 @@ def plot(aop_list, unique_key_events):
                         aop_graph.add_node(ke_up, label=ke_up.get_label(), ke_type=ke_up.print_ke_type(), ke_in_aop=ke_up.get_aop(),
                                            ke_identifier=ke_up.get_identifier(),
                                            ke_aop_urls=ke_up.get_aop_urls(), ke_url=ke_up.get_identifier())
-                        print('2 - label: {}, type: {} ke in aop: {}'.format(ke_up.get_label(),
-                                                               ke_up.print_ke_type(), ke_up.get_aop()))  # Remove later, used for debugging
+
                         # add edge from current node to ke_up
                         aop_graph.add_edge(ke_up, ke)
                         # add genes to graph
@@ -91,8 +86,7 @@ def plot(aop_list, unique_key_events):
                         aop_graph.add_node(ke_dwn, label=ke_dwn.get_label(), ke_type=ke_dwn.print_ke_type(), ke_in_aop=ke_dwn.get_aop(),
                                            ke_identifier=ke_dwn.get_identifier(),
                                            ke_aop_urls=ke_dwn.get_aop_urls(), ke_url=ke_dwn.get_identifier())
-                        print('3 - label: {}, type: {} ke in aop: {}'.format(ke.get_label(),
-                                                               ke.print_ke_type(), ke_dwn.get_aop()))  # Remove later, used for debugging
+
                         # add edge from current node to ke_up
                         aop_graph.add_edge(ke, ke_dwn)
                         # add genes to graph
@@ -103,11 +97,6 @@ def plot(aop_list, unique_key_events):
                         if aop_graph.has_edge(ke, ke_dwn) == False:
                             # don't exist, add edge
                             aop_graph.add_edge(ke, ke_dwn)
-
-    else:
-        # plot multiple aops.
-        print('plot {} aops', len(aop_list))
-        # need to check
 
     return aop_graph
 
@@ -132,8 +121,7 @@ def ke_obj_to_str(aop_graph, bool_genes):
     mapping_label = {}
 
     if bool_genes:
-        print('include genes')
-        print(aop_graph)
+
         for nodes in aop_graph:
             if not isinstance(nodes, str):
                 if type(nodes.get_title()) is dict:
@@ -149,7 +137,6 @@ def ke_obj_to_str(aop_graph, bool_genes):
         graph_relabeled = nx.relabel_nodes(aop_graph, mapping_label)
         return graph_relabeled
     else:
-        print('dont include genes')
         no_genes_graph = aop_graph.copy()
         for nodes in aop_graph:
             if not isinstance(nodes, str):

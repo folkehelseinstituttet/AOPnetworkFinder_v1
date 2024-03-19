@@ -1,7 +1,6 @@
 //sending the user inputted values to the backend for processing
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('submitBtn').addEventListener('click', function(event) {
-        console.log('Pressing the button searchButtonAOP')
         event.preventDefault();
 
         var formData = new FormData();
@@ -176,13 +175,12 @@ function initializeColumnResizing() {
     document.querySelectorAll('th .resize-handle').forEach(handle => {
         handle.addEventListener('mousedown', function(e) {
             e.preventDefault(); // Avoid text selection
-            console.log('MouseDown on handle detected');
+
             let startX = e.pageX;
             let startWidth = handle.parentElement.offsetWidth;
 
             function mouseMoveHandler(e) {
                 // Calculate the new width
-                console.log('MouseMove event');
                 let newWidth = startWidth + (e.pageX - startX);
                 console.log(`New Width: ${newWidth}, Current Width: ${handle.parentElement.style.width}`);
                 handle.parentElement.style.width = `${newWidth}px`;
@@ -190,7 +188,6 @@ function initializeColumnResizing() {
             }
 
             function mouseUpHandler() {
-                console.log('MouseUp event');
                 document.removeEventListener('mousemove', mouseMoveHandler);
                 document.removeEventListener('mouseup', mouseUpHandler);
             }

@@ -12,7 +12,7 @@ class aop:
         self.molecular_init_event = []
         self.adverse_outcome = []
         self.list_of_key_events = []  # type key_event, tuple (key_event_object, ke_numerical_id)
-        print('read dict')
+
         if api_flag == False:
             self.read_json(unique_ke_list)
             # add the json_dict again and add upstream/downstream for each key. using the list 'self.list_of_key_events'
@@ -29,16 +29,13 @@ class aop:
         tmp_id = [x['aop_id'] for x in self.json_dictionary['results']['bindings']]
         for x in tmp_id:
             if self.aop_identifier == 0:
-                print('yes')
                 # update identifier and break loop.
                 pattern = "\\d+$"  # pattern
                 self.aop_identifier = re.findall(pattern, x['value'])  # return a list of single AOP id
                 self.aop_url = x['value']
                 break
 
-        print('inside aop class: read_json')
         # loop through the dictionary, initiate and append key_events to the list_of_key_events
-
         # find MIE and initiate a key_event object. append to molecular_init_event list
         aop_mie = []
         try:
@@ -50,13 +47,7 @@ class aop:
         for x in aop_mie:
             if x['value'] not in tmp_mie:
                 tmp_mie.append(x['value'])
-                print(x['value'])
 
-        # find all AO
-        print('AO')
-        # if len(self.aop_identifier[0]) > 0:
-        print('json_dict: ', self.json_dictionary)
-        print(self.aop_identifier)
         '''if AOP Identifier = 0, return none (query found an AOP, but got nothing from the sparql query)'''
         # TODO: Rewrite the sparql query (fix the small bug)
         if self.aop_identifier == 0:
@@ -69,10 +60,7 @@ class aop:
         ##no dupes
         tmp_ke = []
 
-        ####for x in existing_ke:
-        ####    print('inside -- existing_ke -- in json_read {}'.format(x.get_ke_numerical_id()))
         # initiate and append AO
-        print('initiate AO')
         for x in list_ao['results']['bindings']:
             if x['ao']['value'] not in list_ao_data:
                 tmp_ke.append(x['ao']['value'])
@@ -98,9 +86,8 @@ class aop:
                     self.list_of_key_events.append((new_ao, new_ao.get_ke_numerical_id()))
                     # append to existing_ke list
                     existing_ke.append((new_ao, new_ao.get_ke_numerical_id()))
-                    new_ao.test_print_all()
+                    #new_ao.test_print_all()
                 else:
-                    print('retrieve AOP')
                     # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                     # append retrieved_ke to list
                     existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
@@ -119,7 +106,6 @@ class aop:
                         extract_id = "\\d+$"  # pattern
                         extracted_id = re.findall(extract_id, x['KE_up']['value'])
                         retrive_ke = self.get_index_of_tuple_list(0, x['KE_up']['value'], existing_ke)
-                        print('MIE_retrive value check: ', retrive_ke)
                         if retrive_ke is None:
                             mie_identifier = x['ke_id']['value']
                             mie_label = x['ke_label']['value']
@@ -142,9 +128,8 @@ class aop:
                             # append to existing_ke list
                             existing_ke.append((new_mie, new_mie.get_ke_numerical_id()))
 
-                            new_mie.test_print_all()
+                            #new_mie.test_print_all()
                         else:
-                            print('retrive MIE')
                             # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                             # append retrieved_ke to list
                             existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
@@ -170,7 +155,6 @@ class aop:
 
                             # check if x['ke_genes']['value'] column exist, if not do nothing.
                             try:
-                                print(x['ke_genes']['value'])
                                 gene_id = x['ke_genes']['value']
                                 new_ke.add_genes(gene_id)
                             except KeyError as e:
@@ -178,9 +162,8 @@ class aop:
                             # append to both molecular_initiating_list and list_of_key_events
                             self.list_of_key_events.append((new_ke, new_ke.get_ke_numerical_id()))
                             existing_ke.append((new_ke, new_ke.get_ke_numerical_id()))
-                            new_ke.test_print_all()
+                            #new_ke.test_print_all()
                         else:
-                            print('Retrieve KE')
                             # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                             # append retrieved_ke to list
                             existing_ke[retrive_ke][0].set_aop(self.aop_identifier[0])
@@ -194,7 +177,6 @@ class aop:
                     # chech if x['ke_genes']['value'] column exist, if not do nothing.
                     try:
                         # find the object at try to append the genes (if it exist)
-                        print(x['ke_genes']['value'])
                         # TODO: find another solution, inefficient O(n^2) (code still works)
                         for i, _ in self.list_of_key_events:
                             if i.get_identifier() == x['ke_id']['value']:
@@ -238,7 +220,7 @@ class aop:
                             # append to existing_ke list
                             existing_ke.append((new_mie, new_mie.get_ke_numerical_id()))
 
-                            new_mie.test_print_all()
+                            #new_mie.test_print_all()
                         else:
                             # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                             # append retrieved_ke to list
@@ -265,7 +247,6 @@ class aop:
 
                             # check if x['ke_genes']['value'] column exist, if not do nothing.
                             try:
-                                print(x['ke_dwn_genes']['value'])
                                 gene_id = x['ke_dwn_genes']['value']
                                 new_ke.add_genes(gene_id)
                             except KeyError as e:
@@ -273,7 +254,7 @@ class aop:
                             # append to both molecular_initiating_list and list_of_key_events
                             self.list_of_key_events.append((new_ke, new_ke.get_ke_numerical_id()))
                             existing_ke.append((new_ke, new_ke.get_ke_numerical_id()))
-                            new_ke.test_print_all()
+                            #new_ke.test_print_all()
                         else:
                             # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
                             # append retrieved_ke to list
@@ -288,7 +269,6 @@ class aop:
                     # chech if x['ke_genes']['value'] column exist, if not do nothing.
                     try:
                         # find the object at try to append the genes (if it exist)
-                        print(x['ke_dwn_genes']['value'])
                         # TODO: find another solution, inefficient O(n^2) (code still works)
                         for i, _ in self.list_of_key_events:
                             if i.get_identifier() == x['ke_dwn_id']['value']:
@@ -298,16 +278,6 @@ class aop:
                         print(e)
             except KeyError as e:
                 print(e)
-
-        for x in existing_ke:
-            print('inside -- existing_ke -- in json_read {}'.format(x))
-
-        for x in tmp_ke:
-            print('inside tmp_ke: {}'.format(x))
-
-        for x in self.list_of_key_events:
-            print('inside self.list_of_key_events {}'.format(x))
-            print('KE type: {}'.format(x[0].print_ke_type()))
 
     # find and add pointers to upstream and downstream ke, for each KE in the list 'self.list_of_key_events'
     def add_up_and_downstream(self):
@@ -324,7 +294,6 @@ class aop:
             if index_ke_upstream != None:
                 # current KE. If index_ke_downstream != none. add the KE object as downstream ke pointer for current KE
                 if index_ke_downstream != None:
-                    print('Added upstream and downstream pointers')
                     # current KE object from self.list_of_ke
                     self.list_of_key_events[index_ke_upstream][0].add_downstream(
                         self.list_of_key_events[index_ke_downstream][0])
@@ -340,13 +309,12 @@ class aop:
             return None'''
 
         for list_index, t in enumerate(ke_list):
-            print('inside get_index_of_tuple_list: {}, search_ke_id: {}'.format(t[tuple_index].get_identifier(),
-                                                                                search_ke_id))
             if t[tuple_index].get_identifier() == search_ke_id:
                 # found position
                 return list_index
         return None
 
+    """Not In Use"""
     def read_json_api(self, existing_ke):
 
         '''store the ke in their temporarily list (just IDs, no objects)'''
@@ -388,7 +356,7 @@ class aop:
                 self.list_of_key_events.append((new_ao, new_ao.get_ke_numerical_id()))
                 # append to existing_ke list
                 existing_ke.append((new_ao, new_ao.get_ke_numerical_id()))
-                new_ao.test_print_all()
+                #new_ao.test_print_all()
             else:
                 print('retrieve AOP')
                 # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
@@ -417,7 +385,7 @@ class aop:
                 self.list_of_key_events.append((new_mie, new_mie.get_ke_numerical_id()))
                 # append to existing_ke list
                 existing_ke.append((new_mie, new_mie.get_ke_numerical_id()))
-                new_mie.test_print_all()
+                #new_mie.test_print_all()
             else:
                 print('retrieve AOP')
                 # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
@@ -445,7 +413,7 @@ class aop:
                 self.list_of_key_events.append((new_ke, new_ke.get_ke_numerical_id()))
                 # append to existing_ke list
                 existing_ke.append((new_ke, new_ke.get_ke_numerical_id()))
-                new_ke.test_print_all()
+                #new_ke.test_print_all()
             else:
                 print('retrieve AOP')
                 # retrieved_ke is not None, but is a Key event object (don't initiate new key event)
