@@ -8,6 +8,8 @@ import logging
 from . import cache
 from werkzeug.utils import secure_filename
 
+from .security_config.AopKeFormDataExctarctionValidation import AopKeFormDataExtractionValidation, \
+    sanitize_form_extraction
 from .security_config.AopKeFormValidation import AopKeFormValidation, sanitize_form
 
 
@@ -156,39 +158,44 @@ def search_aops():
 
 @app.route("/data-extraction-submit", methods=['POST'])
 def extract_from_aop_wiki():
-    aop_input = request.form.get('searchFieldAOPs')
-    ke_input = request.form.get('searchFieldKEs')
-    print(aop_input)
-    print(ke_input)
-    if aop_input == '':
-        ke_list_tuple = [("In AOP", request.form.get("ke_chx_in_aop")),
-                         ("ke stressor", request.form.get("ke_chx_stressor")),
-                         ("ke genes", request.form.get("ke_chx_genes")),
-                         ("ke cell type context", request.form.get("ke_chx_cell_type")),
-                         ("ke description", request.form.get("ke_chx_description")),
-                         ("ke measurements", request.form.get("ke_chx_measurements"))]
-        print('aop: {}'.format(aop_input))
-        print('ke: {}'.format(ke_input))
-        json_file, column_header = data_extraction_sv.query_sparql(ke_list_tuple, aop_input, ke_input)
-        print("aop_list_tuples {}".format(ke_list_tuple))
-        print("json: {}".format(json_file))
-        print("header: {}".format(column_header))
-        return jsonify(json_file)
-    else:
-        aop_list_tuple = [("abstract", request.form.get("aop_chx_abstract")),
-                          ("stressor", request.form.get("aop_chx_stressor")),
-                          ("ke", request.form.get("aop_chx_ke")),
-                          ("mie", request.form.get("aop_chx_mie")),
-                          ("ao", request.form.get("aop_chx_ao")),
-                          ("KE Genes", request.form.get("aop_chx_ke_genes")),
-                          ("aop_author", request.form.get("aop_chx_author"))]
-        print('aop: {}'.format(aop_input))
-        print('ke: {}'.format(ke_input))
-        json_file, column_header = data_extraction_sv.query_sparql(aop_list_tuple, aop_input, ke_input)
-        print("aop_list_tuples {}".format(aop_list_tuple))
-        print("json: {}".format(json_file))
-        print("header: {}".format(column_header))
-        return jsonify(json_file)
+
+    form = AopKeFormDataExtractionValidation(formdata=request.form)
+    print("formdata: {}".format(form.data))
+    if form.validate_on_submit():
+        aop_input = form.searchFieldAOPs.data
+        ke_input = form.searchFieldKEs.data
+        sanitize_form_extraction(form)
+        print(aop_input)
+        print(ke_input)
+        if aop_input == '':
+            ke_list_tuple = [("In AOP", request.form.get("ke_chx_in_aop")),
+                             ("ke stressor", request.form.get("ke_chx_stressor")),
+                             ("ke genes", request.form.get("ke_chx_genes")),
+                             ("ke cell type context", request.form.get("ke_chx_cell_type")),
+                             ("ke description", request.form.get("ke_chx_description")),
+                             ("ke measurements", request.form.get("ke_chx_measurements"))]
+            print('aop: {}'.format(aop_input))
+            print('ke: {}'.format(ke_input))
+            json_file, column_header = data_extraction_sv.query_sparql(ke_list_tuple, aop_input, ke_input)
+            print("aop_list_tuples {}".format(ke_list_tuple))
+            print("json: {}".format(json_file))
+            print("header: {}".format(column_header))
+            return jsonify(json_file)
+        else:
+            aop_list_tuple = [("abstract", request.form.get("aop_chx_abstract")),
+                              ("stressor", request.form.get("aop_chx_stressor")),
+                              ("ke", request.form.get("aop_chx_ke")),
+                              ("mie", request.form.get("aop_chx_mie")),
+                              ("ao", request.form.get("aop_chx_ao")),
+                              ("KE Genes", request.form.get("aop_chx_ke_genes")),
+                              ("aop_author", request.form.get("aop_chx_author"))]
+            print('aop: {}'.format(aop_input))
+            print('ke: {}'.format(ke_input))
+            json_file, column_header = data_extraction_sv.query_sparql(aop_list_tuple, aop_input, ke_input)
+            print("aop_list_tuples {}".format(aop_list_tuple))
+            print("json: {}".format(json_file))
+            print("header: {}".format(column_header))
+            return jsonify(json_file)
     return render_template('data_displayer_page_two.html', data=None)
 
 @app.route('/get_stressors')
