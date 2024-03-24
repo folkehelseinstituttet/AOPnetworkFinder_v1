@@ -16,16 +16,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Create and activate virtual environment
-RUN python3 -m venv venv
-ENV PATH="/app/venv/bin:$PATH"
+RUN python3 -m venv env
 
 # Upgrade pip and setuptools to secure versions
-RUN pip install --upgrade pip "setuptools>=65.5.1"
+RUN /app/env/bin/python -m pip install --upgrade pip "setuptools>=65.5.1"
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install gunicorn
+RUN /app/env/bin/python -m pip install --no-cache-dir -r requirements.txt
+##RUN /app/env/bin/python -m pip install --no-cache-dir gunicorn
 
 # Add a non-root user and switch to it
 RUN useradd -m myuser
@@ -38,4 +37,4 @@ COPY . .
 EXPOSE 8000
 
 # Command to run the app using Gunicorn
-CMD ["gunicorn", "-w", "4", "-b", ":8000", "run:app"]
+CMD ["/app/env/bin/gunicorn", "-w", "4", "-b", ":8000", "run:app"]
