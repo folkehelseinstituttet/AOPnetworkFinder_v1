@@ -98,7 +98,6 @@ function render_graph(url_string, formData) {
                 {
                     selector: 'node[ke_type="Molecular Initiating Event"]',
                     style: {
-                        'shape': 'square',
                         'label': 'data(id)',
                         'background-color': '#00A79D'  // Green for 'Key Event'
                     }
@@ -106,7 +105,6 @@ function render_graph(url_string, formData) {
                 {
                     selector: 'node[ke_type="Adverse Outcome"]',
                     style: {
-                        'shape': 'triangle',
                         'label': 'data(id)',
                         'background-color': '#ED1C24'  // Red for 'Adverse Outcome'
                     }
