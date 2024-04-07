@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <!-- Responsive meta tag -->
-    <title>{% block title %}Default Title{% endblock %}</title>
+    <title>{% block title %}AOP-networkFinder{% endblock %}</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/aop_icon_tab.png') }}">
 
     {% block extra_css %}
     {% endblock %}
@@ -32,7 +33,7 @@
     <!-- Bootstrap Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-        <!-- AOPnetworkFinder Logo -->
+        <!-- AOP-networkFinder Logo -->
         <a class="nav-icon" href="/">
             <img src="{{ url_for('static', filename='images/logo_transparent.drawio.svg') }}" alt="AOPnetworkFinder Logo">
         </a>
