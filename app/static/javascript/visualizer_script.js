@@ -514,6 +514,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
         // manuel merge
              mergeNodes(keepNodeDropDown, loseNodeDropDown)
+             loggingMergeActions(keepNodeDropDown, loseNodeDropDown)
         }
 
         //Button merge process
@@ -732,6 +733,7 @@ function loggingAopVisualized(aop_before_filter, aop_after_filter){
 }
 
 function saveLogToFile() {
+    globalUserActionsLog.push('\nThank you for using the AOP-networkFinder tool. Please remember to cite this article:\n(link to article)')
     const logContent = globalUserActionsLog.join('\n');
     const blob = new Blob([logContent], {type: "text/plain;charset=utf-8"});
     const url = URL.createObjectURL(blob);
