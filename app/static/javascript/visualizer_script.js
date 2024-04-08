@@ -683,40 +683,42 @@ function logUserInput(formData) {
     logHeaderName("USER INPUTS\n")
 
     if (formData.get("searchFieldAOP")){
+        logHeaderName("USER INPUT AOP IDS:\n")
         logUserAction(formData.get("searchFieldAOP"));
     }
 
     if (formData.get("searchFieldKE")){
+        logHeaderName("USER INPUT KE IDS:\n")
         logUserAction(formData.get("searchFieldKE"));
     }
 
     if (formData.get("stressorDropdown")){
+        logHeaderName("USER INPUT STRESSOR NAME:\n")
         logUserAction(formData.get("stressorDropdown"));
     }
 
-    logHeaderName("\n")
+    /*logHeaderName("\n")
 
     if (formData.get("checkedBoxGene") === '1'){
         logUserAction("Genes enabled");
     }else{
         logUserAction("Genes disabled");
-    }
+    }*/
 
-    logHeaderName("\nFilters Enabled\n")
     if (formData.get("checkboxDevelopment") === '1'){
-        logUserAction("OECD Under Development");
+        logUserAction("Filtering: OECD Under Development");
     }
 
     if (formData.get("checkboxEndorsed") === '1'){
-        logUserAction("OECD WPHA Endorsed");
+        logUserAction("Filtering: OECD WPHA Endorsed");
     }
 
     if (formData.get("checkboxReview") === '1'){
-        logUserAction("OECD Under Review");
+        logUserAction("Filtering: OECD Under Review");
     }
 
     if (formData.get("checkboxApproved") === '1'){
-        logUserAction("OECD EAGMST Approved");
+        logUserAction("Filtering: OECD EAGMST Approved");
     }
 }
 
