@@ -39,5 +39,5 @@ http://localhost:8000
 
 You should see a window similar to this:
 
-![main window](/images/main.png?raw=true)
+![main window](/images/AOPnetworkFinder_main_page.png)
 
