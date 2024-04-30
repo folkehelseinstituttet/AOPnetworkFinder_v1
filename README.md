@@ -1,4 +1,15 @@
-Web-Application AOP-networkFinder
+Web-Application AOP-networkFinder is available under:
+https://aop-networkfinder.no/
+
+
+How to cite the AOP-networkFinder:
+MS ID#: BIORXIV/2024/591733
+AOP-networkFinder - A versatile and user-friendly tool for FAIR reconstruction of Adverse Outcome Pathway networks from the AOP-Wiki"
+Nurettin Yarar, Marvin Martens, Torbjørn Rognes, Jan Lavender, Hubert Dirven, Karine Audouze, Marcin W. Wojewodzic#
+# correspondence marcin.wojewodzic@kreftregisteret.no
+
+
+
 
 ![alt text|100](/images/AOP-networkFinder_for_paper.jpg)
 
@@ -11,8 +22,6 @@ The Current GUI of the AOP_Visualizer webpage:
 
  ![main window](/images/Figures_AOP-network-finder_02032024-Figure1_Jan.jpg)
 
-
- How to cite the AOP-networkFinder original method: ""
 
  # How to run the application locally
 
