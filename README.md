@@ -23,20 +23,18 @@ The Current GUI of the AOP_Visualizer webpage:
  ![main window](/images/Figures_AOP-network-finder_02032024-Figure1_Jan.jpg)
 
 
- # 2 How to run the application locally
+# 2 How to run the application locally using Docker
 
-# How to use
-
-### Prerequisites
+## Prerequisites
 Docker installed on your system.
 
-### Building the Docker Image
+## Building the Docker Image
 To build the Docker image, use the following command:
 ```
 docker build --platform=linux/amd64 -t aop-networkfinder:v1 .
 ```
 
-### Running the Application
+## Running the Application
 
 To run the Docker Container:
 ```
