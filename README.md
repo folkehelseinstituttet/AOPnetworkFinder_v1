@@ -1,12 +1,12 @@
 Web-Application AOP-networkFinder is available under:
-https://aop-networkfinder.no/
+# https://aop-networkfinder.no/
 
 
 How to cite the AOP-networkFinder:
 MS ID#: BIORXIV/2024/591733
 AOP-networkFinder - A versatile and user-friendly tool for FAIR reconstruction of Adverse Outcome Pathway networks from the AOP-Wiki"
-# Nurettin Yarar, Marvin Martens, Torbjørn Rognes, Jan Lavender, Hubert Dirven, Karine Audouze, Marcin W. Wojewodzic#
-# correspondence author: marcin.wojewodzic@kreftregisteret.no or maww@fhi.no
+Authors: Nurettin Yarar, Marvin Martens, Torbjørn Rognes, Jan Lavender, Hubert Dirven, Karine Audouze, Marcin W. Wojewodzic#
+Corresponding author: Marcin W. Wojewodzic (email: maww@fhi.no)
 
 
 
