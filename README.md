@@ -1,21 +1,21 @@
 ## Web-Application AOP-networkFinder is available under:
 ## https://aop-networkfinder.no/
 
+Please cite the AOP-networkFinder:
+BIORXIV/2024/591733  "AOP-networkFinder - A versatile and user-friendly tool for FAIR reconstruction of Adverse Outcome Pathway networks from the AOP-Wiki"
+Authors: Nurettin Yarar, Marvin Martens, Torbjørn Rognes, Jan Lavender, Hubert Dirven, Karine Audouze and Marcin W. Wojewodzic#
 
-How to cite the AOP-networkFinder:
-MS ID#: BIORXIV/2024/591733
-AOP-networkFinder - A versatile and user-friendly tool for FAIR reconstruction of Adverse Outcome Pathway networks from the AOP-Wiki"
-Authors: Nurettin Yarar, Marvin Martens, Torbjørn Rognes, Jan Lavender, Hubert Dirven, Karine Audouze, Marcin W. Wojewodzic#
-Corresponding author: Marcin W. Wojewodzic (email: maww@fhi.no)
+Corresponding author: Marcin W. Wojewodzic (Email: maww@fhi.no)
 
-
+Tool version v1 is also on Zenono at Computational Toxicology at Norwegian Institute of Public Health:
+https://zenodo.org/records/11068434
 
 
 ![alt text|100](/images/AOP-networkFinder_for_paper.jpg)
 
 Figure 1 Graphic mark of "AOP-networkFinder. Green represent Molecular Initiation Events (MIEs) in the Adverse Outcome Pathway (AOP). Orange represent adherent Key Events (KEs). Red triangles represent Adverse Outcomes (AOs), at the end of the path. The arrows illustrate the direction of Key Events Relationships (KERs). Blue circles represent genes connected to KEs. Notice that this representation is in form a Directed Acyclic Graph (DAG) with no directed cycles.
 
-Finds the status of all AOPs in the webpage AOPWiki.org/aops (OECD Status)
+1. Finds the status of all AOPs in the webpage AOPWiki.org/aops (OECD Status)
 
 
 The Current GUI of the AOP_Visualizer webpage:
@@ -23,7 +23,7 @@ The Current GUI of the AOP_Visualizer webpage:
  ![main window](/images/Figures_AOP-network-finder_02032024-Figure1_Jan.jpg)
 
 
- # How to run the application locally
+ # 2 How to run the application locally
 
 # How to use
 
@@ -50,6 +50,5 @@ You should see a window similar to this:
 
 ![main window](/images/AOPnetworkFinder_main_page.png)
 
-Tool version v1 is also on Zenono at Computational Toxicology at Norwegian Institute of Public Health:
-https://zenodo.org/records/11068434
+
 
