@@ -50,3 +50,6 @@ You should see a window similar to this:
 
 ![main window](/images/AOPnetworkFinder_main_page.png)
 
+Tool version v1 is also on Zenono at Computational Toxicology at Norwegian Institute of Public Health:
+https://zenodo.org/records/11068434
+
