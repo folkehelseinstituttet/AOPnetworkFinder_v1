@@ -5,7 +5,7 @@ Please cite the AOP-networkFinder:
 BIORXIV/2024/591733  "AOP-networkFinder - A versatile and user-friendly tool for FAIR reconstruction of Adverse Outcome Pathway networks from the AOP-Wiki"
 Authors: Nurettin Yarar, Marvin Martens, Torbjørn Rognes, Jan Lavender, Hubert Dirven, Karine Audouze and Marcin W. Wojewodzic#
 
-Corresponding author: Marcin W. Wojewodzic (Email: maww@fhi.no)
+Corresponding author: Marcin W. Wojewodzic (Email: maww [at] fhi.no)
 
 Tool version v1 is also on Zenono at Computational Toxicology at Norwegian Institute of Public Health:
 https://zenodo.org/records/11068434
