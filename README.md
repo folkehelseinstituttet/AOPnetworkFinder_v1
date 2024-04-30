@@ -1,3 +1,8 @@
+![alt text|100](/images/AOP-networkFinder_for_paper.jpg)
+
+Figure 1 Graphic mark of "AOP-networkFinder. Green represent Molecular Initiation Events (MIEs) in the Adverse Outcome Pathway (AOP). Orange represent adherent Key Events (KEs). Red triangles represent Adverse Outcomes (AOs), at the end of the path. The arrows illustrate the direction of Key Events Relationships (KERs). Blue circles represent genes connected to KEs. Notice that this representation is in form a Directed Acyclic Graph (DAG) with no directed cycles.
+
+
 ## Web-Application AOP-networkFinder is available under:
 ## https://aop-networkfinder.no/
 
@@ -10,10 +15,6 @@ Corresponding author: Marcin W. Wojewodzic (Email: maww [at] fhi.no)
 Tool version v1 is also on Zenono at Computational Toxicology at Norwegian Institute of Public Health:
 https://zenodo.org/records/11068434
 
-
-![alt text|100](/images/AOP-networkFinder_for_paper.jpg)
-
-Figure 1 Graphic mark of "AOP-networkFinder. Green represent Molecular Initiation Events (MIEs) in the Adverse Outcome Pathway (AOP). Orange represent adherent Key Events (KEs). Red triangles represent Adverse Outcomes (AOs), at the end of the path. The arrows illustrate the direction of Key Events Relationships (KERs). Blue circles represent genes connected to KEs. Notice that this representation is in form a Directed Acyclic Graph (DAG) with no directed cycles.
 
 1. Finds the status of all AOPs in the webpage AOPWiki.org/aops (OECD Status)
 
